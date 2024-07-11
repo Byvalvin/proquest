@@ -27,6 +27,7 @@ const server = express(); // init server object
 server.use(cors({
     origin: [ // Allow requests from this origin
         'http://localhost:4000',
+        'https://elegant-kelpie-3d75ed.netlify.app/',
     ], 
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow these HTTP methods
     allowedHeaders: ['Content-Type', 'Authorization'], // Allow these headers
