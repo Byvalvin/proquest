@@ -6,6 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": " concurrently \"npm run start:backend\" \"npm run start:proquest\"  ",
     "start:backend": "cd backend && npm run dev",
+    "start:backend_pro": "cd backend && npm run pro",
     "start:jsonserver": "cd proquest && npm run server",
     "start:proquest": "cd proquest && npm run dev"
   },
