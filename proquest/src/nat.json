@@ -1,0 +1,48 @@
+{
+    "nationalities": [
+    {
+      "abbr": "NIG",
+      "full": "Nigeria",
+      "id": "df3d"
+    },
+    {
+      "abbr": "CAN",
+      "full": "Canada",
+      "id": "428d"
+    },
+    {
+      "abbr": "USA",
+      "full": "United States",
+      "id": "41b1"
+    },
+    {
+      "abbr": "CNG",
+      "full": "Congo",
+      "id": "9405"
+    },
+    {
+      "abbr": "IND",
+      "full": "India",
+      "id": "6110"
+    },
+    {
+      "abbr": "RUS",
+      "full": "Russia",
+      "id": "5823"
+    },
+    {
+      "abbr": "LEB",
+      "full": "Lebanon",
+      "id": "1e2b"
+    },
+    {
+      "abbr": "SKR",
+      "full": "South Korea",
+      "id": "ac7d"
+    },
+    {
+      "abbr": "CMR",
+      "full": "Cameroon"
+    }
+  ]
+}

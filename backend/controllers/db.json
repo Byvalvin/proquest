@@ -1,0 +1,122 @@
+{
+    "players": [
+      {
+        "id": "1",
+        "first": "D",
+        "last": "A",
+        "DOB": {
+          "year": 2001,
+          "month": "Jan",
+          "day": 11
+        },
+        "age": 23,
+        "nationality": "NIG",
+        "location": "CAN",
+        "team": "star United F.C.",
+        "estValue": 1000,
+        "footedness": 1,
+        "position": {
+          "preferred": [
+            "CAM",
+            "CF",
+            "CM",
+            "RW",
+            "LW"
+          ],
+          "other": [
+            "CDM",
+            "RM",
+            "LM",
+            "LB",
+            "RB"
+          ]
+        },
+        "specialities": [
+          "dribbler",
+          "long shots",
+          "finesse",
+          "vision",
+          "weak foot"
+        ],
+        "weaknesses": [
+          "mentality",
+          "decision making",
+          "fear",
+          "stamina",
+          "finishing",
+          "shot power",
+          "ferocity"
+        ],
+        "description": "A fine player. Much too work on",
+        "views": 7,
+        "overall": 90.1,
+        "star": false
+      },
+      {
+        "first": "Catelyn",
+        "last": "K",
+        "DOB": {
+          "year": "",
+          "month": "",
+          "day": ""
+        },
+        "age": "21",
+        "nationality": "CAN",
+        "location": "",
+        "team": "Elite FC",
+        "estValue": "1600",
+        "footedness": 0,
+        "position": {
+          "preferred": [
+            "LB",
+            "LWB",
+            "   CB",
+            "   LM"
+          ],
+          "other": [
+            "LW",
+            "   CM",
+            "   CDM"
+          ]
+        },
+        "specialities": [
+          "Composure",
+          "   Passing"
+        ],
+        "weaknesses": [
+          "Aerial Battles",
+          "   Weak Foot"
+        ],
+        "description": "A solid player",
+        "views": 0,
+        "overall": "79",
+        "star": true,
+        "id": "06da"
+      }
+      
+    ],
+    "teams": [
+      {
+        "name": "Fobs FC",
+        "rating": 78,
+        "year": 1978,
+        "value": 10000,
+        "id": "8503"
+      }
+
+      
+    ],
+    "nationalities": [
+      {
+        "abbr": "NIG",
+        "full": "Nigeria",
+        "id": "df3d"
+      },
+      {
+        "abbr": "CAN",
+        "full": "Canada",
+        "id": "428d"
+      }
+      
+    ]
+  }
