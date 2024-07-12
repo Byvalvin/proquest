@@ -6,18 +6,20 @@ import DualRangeSliderFilter from './filters/DualRangeSliderFilter';
 
 const Filter = ({ filters, setFilters }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [openFilters, setOpenFilters] = useState(filters)
+  const [openFilters, setOpenFilters] = useState(filters);
 
   const toggleFilter = () => {
     setIsOpen(!isOpen);
-    setOpenFilters(filters);
+    setOpenFilters(filters); // Reset openFilters when toggling
   };
+
   // Update openFilters whenever filters prop changes
-    useEffect(() => {
-        setOpenFilters(filters);
-    }, [filters])
+  useEffect(() => {
+    setOpenFilters(filters);
+  }, [filters]);
 
   const removeFilter = (type, index) => {
+    // Update the filters state
     const updatedFilters = { ...openFilters };
     if (type === 'singleCheckFilters') {
       updatedFilters.singleCheckFilters[index].checked = false;
@@ -27,17 +29,11 @@ const Filter = ({ filters, setFilters }) => {
       updatedFilters.dualRangeSliderFilters[index].range = [0, 100]; // Adjust according to your logic
     }
     setFilters(updatedFilters);
-    
-    // Create a copy of openFilters state
+
+    // Update the openFilters state to remove the filter
     const updatedOpenFilters = { ...openFilters };
-    // Create a new array for the specific type of filters
     updatedOpenFilters[type] = openFilters[type].filter((_, idx) => idx !== index);
-    // Update state with the modified filters
     setOpenFilters(updatedOpenFilters);
-    // Perform any action with updatedOpenFilters if needed
-    console.log('Removing filter:', type, index, updatedOpenFilters);
-
-
   };
 
   return (
@@ -54,7 +50,7 @@ const Filter = ({ filters, setFilters }) => {
 
       {/* Filter panel */}
       {isOpen && (
-        <div className="bg-white rounded-md shadow-md px-4 py-3 absolute top-0 right-0 mt-10 z-10">
+        <div className="bg-white rounded-md shadow-md px-4 py-3 absolute top-0 right-0 mt-10 z-20">
           {/* Single Check Filters */}
           {openFilters.singleCheckFilters && openFilters.singleCheckFilters.length > 0 && (
             <div className="mb-4">
@@ -95,7 +91,7 @@ const Filter = ({ filters, setFilters }) => {
           {openFilters.dualRangeSliderFilters && openFilters.dualRangeSliderFilters.length > 0 && (
             <div className="mb-4">
               <h3 className="text-lg font-semibold mb-2">Dual Range Slider Filters</h3>
-              {filters.dualRangeSliderFilters.map((filter, index) => (
+              {openFilters.dualRangeSliderFilters.map((filter, index) => (
                 <div key={index} className="flex items-center justify-between mb-2">
                   <DualRangeSliderFilter {...filter} />
                   <button

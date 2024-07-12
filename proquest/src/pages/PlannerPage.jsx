@@ -115,27 +115,28 @@ const PlannerPage = () => {
   );
 
   return (
-    <div className="formation-planner-page flex">
-      <aside className="left-sidebar w-1/4 bg-gray-100 p-4">
+    <div className="flex flex-col lg:flex-row min-h-screen">
+      <aside className="w-full lg:w-1/4 bg-gray-100 p-4 lg:p-6">
         {showPlayerList && (
-          <div>
-            <SearchBar value={searchTerm} onChange={handleSearchChange} />
+          <div className="relative">
+            <SearchBar value={searchTerm} onChange={handleSearchChange} className="mb-4" />
             <PlayerList
               players={filteredPlayers}
               onPlayerSelect={handleSelectPlayer}
               onClose={handleClosePlayerList}
+              className="max-h-[calc(100vh-120px)] overflow-y-auto"
             />
           </div>
         )}
       </aside>
-      <main className="center-section w-1/2 p-4">
+      <main className="w-full lg:w-1/2 p-4 lg:p-6 flex-grow">
         <FormationDisplay
           formation={formation}
           onBoxClick={handleBoxClick}
           onPlayerRemove={handleRemovePlayer}
         />
       </main>
-      <div className="right-sidebar w-1/4 bg-gray-100 p-4">
+      <div className="w-full lg:w-1/4 bg-gray-100 p-4 lg:p-6">
         <ControlPanel onUpdateFormation={handleUpdateFormation} onResetPlayers={handleResetPlayers} />
       </div>
     </div>

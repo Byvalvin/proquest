@@ -11,7 +11,7 @@ const FormationDisplay = ({ formation, onBoxClick, onPlayerRemove }) => {
             lineItem.players.map((player, playerIndex) => (
               <div
                 key={playerIndex}
-                className="relative w-24 h-32" // Updated size to match PlannerPlayer
+                className="relative w-24 h-32"
               >
                 <div
                   className="w-full h-full border border-gray-300 rounded-lg flex items-center justify-center cursor-pointer bg-gray-50 hover:bg-gray-100 relative"

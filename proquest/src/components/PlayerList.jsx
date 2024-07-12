@@ -16,6 +16,7 @@ const PlayerList = ({ players, onPlayerSelect, onClose }) => {
             key={player._id}
             player={player}
             onSelect={() => onPlayerSelect(player)}
+            className="hover:bg-gray-100 border border-gray-200 rounded-md p-2"
           />
         ))}
       </div>

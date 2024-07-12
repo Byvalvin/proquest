@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaStar, FaFutbol, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { FaStar, FaFutbol } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 const TeamProfile = ({ profileInfo }) => {

@@ -89,4 +89,111 @@
     border-radius: 4px;
     font-size: 14px;
   }
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /* .dual-range-slider-container {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 20px;
+  }
+  
+  .range-title {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+  
+  .range-slider {
+    position: relative;
+    width: 100%;
+    height: 16px;
+    background-color: #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .slider-track {
+    position: absolute;
+    height: 100%;
+    background-color: #007bff;
+    top: 0;
+    z-index: 1;
+  }
+  
+  .min-slider,
+  .max-slider {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    appearance: none;
+    outline: none;
+    background-color: transparent;
+    cursor: pointer;
+  }
+  
+  .min-slider {
+    z-index: 2;
+  }
+  
+  .max-slider {
+    z-index: 3;
+  }
+  
+  .slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background-color: #007bff;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  
+  .tooltip {
+    position: absolute;
+    top: -30px;
+    background-color: #007bff;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+  
+  .input-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+  
+  .input-wrap {
+    display: flex;
+    align-items: center;
+  }
+  
+  .input-addon {
+    margin-right: 4px;
+    font-weight: bold;
+  }
+  
+  .input-field {
+    width: 60px;
+    padding: 4px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+   */
   
