@@ -32,7 +32,8 @@ const NavBar = () =>{
         {label:"Home",link:"/"},
         {label:"Players", link:"/players"}, 
         {label:"Teams", link:"/teams"},
-        {label:"Join Network", link:"/join"}
+        {label:"Join Network", link:"/join"},
+        {label:"Planner", link:"/planner"},
     ]
     return (
         <nav className="bg-blue-500 py-5">
