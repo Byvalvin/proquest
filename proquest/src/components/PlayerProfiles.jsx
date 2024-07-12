@@ -22,8 +22,7 @@ const PlayerProfiles = ({playerprofiles, title="Scan Talents", isHomePage=false}
 }
 
 const playersLoader = async() =>{
-    //const allPlayersUrl = "/api/players"
-    const allPlayersUrl = "https://proquest-pspc.onrender.com/api/players"
+    const allPlayersUrl = "/api/players"
     const allPlayers = await axios.get(allPlayersUrl)
     return allPlayers.data.data
 }
