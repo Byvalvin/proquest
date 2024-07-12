@@ -22,6 +22,7 @@ import UpdatePlayerPage from './pages/UpdatePlayerPage'
 import TeamProfilePage, {teamLoader} from './pages/TeamProfilePage'
 import TeamProfilesPage from './pages/TeamProfilesPage'
 import { teamsLoader } from './components/TeamProfiles'
+import PlannerPage from './pages/PlannerPage'
 
 
 
@@ -134,6 +135,7 @@ const App = () =>{
         <Route path='/join' element={<AddPlayerPage></AddPlayerPage>}/>
         <Route path='players/update/:id' element={<UpdatePlayerPage></UpdatePlayerPage>} loader={playerLoader}/>
         <Route path='/teams/:id' element={<TeamProfilePage></TeamProfilePage>} loader={teamLoader}/>
+        <Route path='/planner'element={<PlannerPage></PlannerPage>} loader={playersLoader}/>
       </Route>
     )
   )

@@ -1,33 +1,33 @@
 import { useState, useEffect } from "react";
-import axios, { all } from "axios";
+import axios from "axios";
 import { useNavigate } from "react-router-dom"; // to redirect to other page after submit
 import { toast } from "react-toastify";
 import natData from '../nat.json'
 
 const AddPlayerPage = () => {
   
-    const navigate = useNavigate()
+  const navigate = useNavigate()
 
-    const initialPlayerState = {
-        first: "",
-        last: "",
-        DOB: { year: "", month: "", day: "" },
-        age: "",
-        nationality: "",
-        team: "",
-        estValue: 1,
-        footedness: "",
-        mainPosition: "",
-        preferredPositions: "",
-        otherPositions: "",
-        specialities: "",
-        weaknesses: "",
-        description: "",
-        review:"",
-        views: 0,
-        overall: 50.0,
-        star: false
-    };
+  const initialPlayerState = {
+      first: "",
+      last: "",
+      DOB: { year: "", month: "", day: "" },
+      age: "",
+      nationality: "",
+      team: "",
+      estValue: 1,
+      footedness: "",
+      mainPosition: "",
+      preferredPositions: "",
+      otherPositions: "",
+      specialities: "",
+      weaknesses: "",
+      description: "",
+      review:"",
+      views: 0,
+      overall: 50.0,
+      star: false
+  };
       
   const [first, setFirst] = useState(initialPlayerState.first);
   const [last, setLast] = useState(initialPlayerState.last);
@@ -83,7 +83,8 @@ const AddPlayerPage = () => {
 
   const getTeamNames = async () => {
     try {
-      const teamsURL = "/api/teams"
+      // const teamsURL = "/api/teams"
+      const teamsURL = "https://proquest-pspc.onrender.com/api/teams"
       const response = await axios.get(teamsURL);
       const teamNames = response.data.data.map((team) => team.name);
       console.log(teamNames)
@@ -96,7 +97,8 @@ const AddPlayerPage = () => {
 
   const addPlayer = async(player) =>{
     try {
-        const response = await axios.post("/api/players",player)
+        // const response = await axios.post("/api/players",player)
+        const response = await axios.post("https://proquest-pspc.onrender.com/api/players", player)
         console.log(response.data)
         resetForm()
     } catch (error) {

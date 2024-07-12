@@ -12,7 +12,9 @@ const TeamProfilePage = () => {
 
     useEffect(() => {
         const fetchTeam = async () => {
-            const url = `/api/teams/${id}`;
+
+            //const url = `/api/teams/${id}`;
+            const url = `https://proquest-pspc.onrender.com/api/teams/${id}`
             try {
                 const response = await axios.get(url);
                 setTeamInfo(response.data.data);

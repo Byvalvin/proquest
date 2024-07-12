@@ -85,7 +85,7 @@ const UpdatePlayerPage = () =>{
 
     const getTeamNames = async () => {
         try {
-        const response = await axios.get("/api/teams");
+        const response = await axios.get("https://proquest-pspc.onrender.com/api/teams");
         const teamNames = response.data.data.map((team) => team.name);
         return teamNames;
         } catch (error) {
@@ -96,7 +96,8 @@ const UpdatePlayerPage = () =>{
 
     const updatePlayer = async(player)=>{
         try {
-            const updateURL = `/api/players/${playerToUpdate._id}`
+            //const updateURL = `/api/players/${playerToUpdate._id}`
+            const updateURL = `https://proquest-pspc.onrender.com/api/players/${playerToUpdate._id}`
             const response = await axios.put(updateURL,player)
             console.log(response.data)
         } catch (error) {
