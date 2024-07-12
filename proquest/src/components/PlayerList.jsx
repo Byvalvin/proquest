@@ -3,7 +3,7 @@ import PlannerPlayer from './PlannerPlayer';
 
 const PlayerList = ({ players, onPlayerSelect, onClose }) => {
   return (
-    <div className="player-list bg-white p-4 shadow-lg rounded-lg">
+    <div className="player-list bg-white p-4 shadow-lg rounded-lg max-w-md mx-auto">
       <button
         onClick={onClose}
         className="mb-4 bg-red-500 text-white rounded-md py-1 px-4 hover:bg-red-600"

@@ -1,8 +1,9 @@
-// PlannerPage.jsx
 import React, { useState, useEffect } from 'react';
 import ControlPanel from '../components/ControlPanel';
 import FormationDisplay from '../components/FormationDisplay';
 import PlayerList from '../components/PlayerList';
+import SearchBar from '../components/SearchBar'; // Import SearchBar component
+import { useLoaderData } from 'react-router-dom';
 
 const PlannerPage = () => {
   const [formation, setFormation] = useState({
@@ -16,11 +17,8 @@ const PlannerPage = () => {
   const [showPlayerList, setShowPlayerList] = useState(false);
   const [currentBox, setCurrentBox] = useState(null);
 
-  const [availablePlayers, setAvailablePlayers] = useState([
-    { _id: '1', first: 'John', last: 'Doe', position: { preferred: ['CB'] }, star: true, overall: 85 },
-    { _id: '2', first: 'Jane', last: 'Smith', position: { preferred: ['CM'] }, star: false, overall: 78 },
-    { _id: '3', first: 'Goalie', last: 'One', position: { preferred: ['GK'] }, star: true, overall: 90 }
-  ]);
+  const [availablePlayers, setAvailablePlayers] = useState(useLoaderData());
+  const [searchTerm, setSearchTerm] = useState(""); // State for search term
 
   useEffect(() => {
     if (selectedPlayer && currentBox) {
@@ -41,12 +39,10 @@ const PlannerPage = () => {
       }
       setFormation(newFormation);
 
-      // Remove the selected player from available players
       setAvailablePlayers(prevPlayers =>
         prevPlayers.filter(player => player._id !== selectedPlayer._id)
       );
 
-      // Clear selections and close player list
       setSelectedPlayer(null);
       setShowPlayerList(false);
       setCurrentBox(null);
@@ -67,7 +63,6 @@ const PlannerPage = () => {
       }
       setFormation(newFormation);
 
-      // Add the removed player back to available players if not already in the list
       setAvailablePlayers(prevPlayers => {
         if (!prevPlayers.some(player => player._id === playerToRemove._id)) {
           return [...prevPlayers, playerToRemove];
@@ -75,7 +70,6 @@ const PlannerPage = () => {
         return prevPlayers;
       });
 
-      // Clear current box to close the list
       setCurrentBox(null);
     }
   };
@@ -96,7 +90,7 @@ const PlannerPage = () => {
 
   const handleUpdateFormation = (newFormation) => {
     setFormation(newFormation);
-    handleResetPlayers(); // Reset players when the formation is updated
+    handleResetPlayers();
   };
 
   const handleResetPlayers = () => {
@@ -104,27 +98,41 @@ const PlannerPage = () => {
       .flatMap(lines => lines.flatMap(line => line.players.filter(player => player)))
     
     setAvailablePlayers(prevPlayers => [
-      ...prevPlayers.filter(player => !allPlayers.some(p => p._id === player._id)), // Remove any players that are already in the formation
+      ...prevPlayers.filter(player => !allPlayers.some(p => p._id === player._id)),
       ...allPlayers
     ]);
   };
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  // Filter available players based on the search term
+  const filteredPlayers = availablePlayers.filter(player => 
+    player.first.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    player.last.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (player.position?.preferred[0] || '').toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="formation-planner-page flex">
       <aside className="left-sidebar w-1/4 bg-gray-100 p-4">
         {showPlayerList && (
-          <PlayerList
-            players={availablePlayers}
-            onPlayerSelect={handleSelectPlayer}
-            onClose={handleClosePlayerList}
-          />
+          <div>
+            <SearchBar value={searchTerm} onChange={handleSearchChange} />
+            <PlayerList
+              players={filteredPlayers}
+              onPlayerSelect={handleSelectPlayer}
+              onClose={handleClosePlayerList}
+            />
+          </div>
         )}
       </aside>
       <main className="center-section w-1/2 p-4">
         <FormationDisplay
           formation={formation}
           onBoxClick={handleBoxClick}
-          onPlayerRemove={handleRemovePlayer} // Add handler
+          onPlayerRemove={handleRemovePlayer}
         />
       </main>
       <div className="right-sidebar w-1/4 bg-gray-100 p-4">

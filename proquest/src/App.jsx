@@ -135,7 +135,7 @@ const App = () =>{
         <Route path='/join' element={<AddPlayerPage></AddPlayerPage>}/>
         <Route path='players/update/:id' element={<UpdatePlayerPage></UpdatePlayerPage>} loader={playerLoader}/>
         <Route path='/teams/:id' element={<TeamProfilePage></TeamProfilePage>} loader={teamLoader}/>
-        <Route path='/planner'element={<PlannerPage></PlannerPage>} />
+        <Route path='/planner'element={<PlannerPage></PlannerPage>} loader={playersLoader}/>
       </Route>
     )
   )

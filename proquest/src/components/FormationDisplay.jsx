@@ -1,4 +1,3 @@
-// FormationDisplay.jsx
 import React from 'react';
 import PlannerPlayer from './PlannerPlayer';
 
@@ -12,7 +11,7 @@ const FormationDisplay = ({ formation, onBoxClick, onPlayerRemove }) => {
             lineItem.players.map((player, playerIndex) => (
               <div
                 key={playerIndex}
-                className="relative w-20 h-28"
+                className="relative w-24 h-32" // Updated size to match PlannerPlayer
               >
                 <div
                   className="w-full h-full border border-gray-300 rounded-lg flex items-center justify-center cursor-pointer bg-gray-50 hover:bg-gray-100 relative"
@@ -24,7 +23,7 @@ const FormationDisplay = ({ formation, onBoxClick, onPlayerRemove }) => {
                       onSelect={() => onPlayerRemove(lineType, lineIndex, playerIndex)} // Add onPlayerRemove handler
                     />
                   ) : (
-                    <span className="text-2xl font-bold">+</span>
+                    <span className="text-4xl font-bold">+</span>
                   )}
                 </div>
               </div>
