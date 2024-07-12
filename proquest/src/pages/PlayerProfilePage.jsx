@@ -197,7 +197,8 @@ const PlayerProfilePage = () =>{
 }
 
 const playerLoader = async ({params}) => {
-    const playerUrl = `/api/players/${params.id}`;
+    // const playerUrl = `/api/players/${params.id}`;
+    const playerUrl = `https://proquest-pspc.onrender.com/api/players/${params.id}`
     try {
       const player = await axios.get(playerUrl);
         console.log('Request URL:', player.config.url);
