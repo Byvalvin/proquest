@@ -200,6 +200,7 @@ const playerLoader = async ({params}) => {
     const playerUrl = `/api/players/${params.id}`;
     try {
       const player = await axios.get(playerUrl);
+        console.log('Request URL:', player.config.url);
       console.log(player,"locader")
       return player.data.data;
     } catch (error) {
