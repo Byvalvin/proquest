@@ -25,6 +25,7 @@ export default defineConfig({
         target:baseURLs.api,
         changeOrigin:true,
         // rewrite:(path)=>path.replace(/^\/api/,"") // /api maps to https://localhost:7000
+        rewrite: (path) => path.replace(/^\/api/, '/api'), // optional, if you need to rewrite the path
       }
     }
   }
