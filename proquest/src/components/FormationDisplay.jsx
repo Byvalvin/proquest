@@ -2,7 +2,7 @@
 import React from 'react';
 import PlannerPlayer from './PlannerPlayer';
 
-const FormationDisplay = ({ formation, onBoxClick }) => {
+const FormationDisplay = ({ formation, onBoxClick, onPlayerRemove }) => {
   // Function to render a line of positions
   const renderLine = (line, lineType) => (
     <div key={lineType} className="flex flex-col items-center gap-4 mb-4">
@@ -19,7 +19,10 @@ const FormationDisplay = ({ formation, onBoxClick }) => {
                   onClick={() => onBoxClick(lineType, lineIndex, playerIndex)}
                 >
                   {player ? (
-                    <PlannerPlayer player={player} onSelect={() => {}} />
+                    <PlannerPlayer 
+                      player={player} 
+                      onSelect={() => onPlayerRemove(lineType, lineIndex, playerIndex)} // Add onPlayerRemove handler
+                    />
                   ) : (
                     <span className="text-2xl font-bold">+</span>
                   )}

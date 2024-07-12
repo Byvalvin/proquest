@@ -6,7 +6,7 @@ import PlayerList from '../components/PlayerList';
 
 const PlannerPage = () => {
   const [formation, setFormation] = useState({
-    defenseLines: [{ players: [null, ] }],
+    defenseLines: [{ players: [null] }],
     midfieldLines: [{ players: [null] }],
     attackLines: [{ players: [null] }],
     goalkeeperLine: [{ players: [null] }]
@@ -30,27 +30,52 @@ const PlannerPage = () => {
 
   const handleAddPlayer = (lineType, lineIndex, playerIndex) => {
     if (selectedPlayer) {
-      console.log(lineType,"type")
       const newFormation = { ...formation };
-      const line = lineType==="goalkeeper" ? newFormation[`${lineType}Line`][lineIndex] : newFormation[`${lineType}Lines`][lineIndex];
-      console.log(line)
+      const line = lineType === "goalkeeper" ? newFormation[`${lineType}Line`][lineIndex] : newFormation[`${lineType}Lines`][lineIndex];
       const updatedPlayers = [...line.players];
       updatedPlayers[playerIndex] = selectedPlayer;
-      if(lineType==="goalkeeper"){
+      if (lineType === "goalkeeper") {
         newFormation[`${lineType}Line`][lineIndex] = { players: updatedPlayers };
-      }else{
+      } else {
         newFormation[`${lineType}Lines`][lineIndex] = { players: updatedPlayers };
       }
       setFormation(newFormation);
 
       // Remove the selected player from available players
-      setAvailablePlayers((prevPlayers) =>
-        prevPlayers.filter((player) => player._id !== selectedPlayer._id)
+      setAvailablePlayers(prevPlayers =>
+        prevPlayers.filter(player => player._id !== selectedPlayer._id)
       );
 
       // Clear selections and close player list
       setSelectedPlayer(null);
       setShowPlayerList(false);
+      setCurrentBox(null);
+    }
+  };
+
+  const handleRemovePlayer = (lineType, lineIndex, playerIndex) => {
+    const playerToRemove = formation[lineType === "goalkeeper" ? `${lineType}Line` : `${lineType}Lines`][lineIndex].players[playerIndex];
+    if (playerToRemove) {
+      const newFormation = { ...formation };
+      const line = lineType === "goalkeeper" ? newFormation[`${lineType}Line`][lineIndex] : newFormation[`${lineType}Lines`][lineIndex];
+      const updatedPlayers = [...line.players];
+      updatedPlayers[playerIndex] = null;
+      if (lineType === "goalkeeper") {
+        newFormation[`${lineType}Line`][lineIndex] = { players: updatedPlayers };
+      } else {
+        newFormation[`${lineType}Lines`][lineIndex] = { players: updatedPlayers };
+      }
+      setFormation(newFormation);
+
+      // Add the removed player back to available players if not already in the list
+      setAvailablePlayers(prevPlayers => {
+        if (!prevPlayers.some(player => player._id === playerToRemove._id)) {
+          return [...prevPlayers, playerToRemove];
+        }
+        return prevPlayers;
+      });
+
+      // Clear current box to close the list
       setCurrentBox(null);
     }
   };
@@ -69,6 +94,21 @@ const PlannerPage = () => {
     setCurrentBox(null);
   };
 
+  const handleUpdateFormation = (newFormation) => {
+    setFormation(newFormation);
+    handleResetPlayers(); // Reset players when the formation is updated
+  };
+
+  const handleResetPlayers = () => {
+    const allPlayers = Object.values(formation)
+      .flatMap(lines => lines.flatMap(line => line.players.filter(player => player)))
+    
+    setAvailablePlayers(prevPlayers => [
+      ...prevPlayers.filter(player => !allPlayers.some(p => p._id === player._id)), // Remove any players that are already in the formation
+      ...allPlayers
+    ]);
+  };
+
   return (
     <div className="formation-planner-page flex">
       <aside className="left-sidebar w-1/4 bg-gray-100 p-4">
@@ -84,10 +124,11 @@ const PlannerPage = () => {
         <FormationDisplay
           formation={formation}
           onBoxClick={handleBoxClick}
+          onPlayerRemove={handleRemovePlayer} // Add handler
         />
       </main>
       <div className="right-sidebar w-1/4 bg-gray-100 p-4">
-        <ControlPanel onUpdateFormation={setFormation} />
+        <ControlPanel onUpdateFormation={handleUpdateFormation} onResetPlayers={handleResetPlayers} />
       </div>
     </div>
   );
