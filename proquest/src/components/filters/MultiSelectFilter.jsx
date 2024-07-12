@@ -7,7 +7,6 @@ const MultiSelectFilter = ({ label, options, selectedValues, onChange }) => {
     const selectOptions = options.map(option => ({
         value: option.value,
         label: option.label,
-        map: option.map
     }));
 
     // Handle change function to return selected values
@@ -23,13 +22,15 @@ const MultiSelectFilter = ({ label, options, selectedValues, onChange }) => {
     };
 
     return (
-        <div className="mb-2">
-            <label>{label}</label>
+        <div className="mb-4">
+            <label className="block font-medium mb-1">{label}</label>
             <Select
                 isMulti
                 options={selectOptions}
                 value={selectedValues.map(value => ({ value, label: value }))} // Map selected values to react-select format
                 onChange={handleSelectChange}
+                className="basic-multi-select"
+                classNamePrefix="select"
             />
             {selectedValues.length > 0 && (
                 <div className="mt-2">

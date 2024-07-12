@@ -36,4 +36,3 @@ const teamsLoader = async () => {
 };
 
 export { TeamProfiles as default, teamsLoader };
-

@@ -5,11 +5,11 @@ const SingleCheckFilter = ({ label, checked, onChange }) => {
     <div className="flex items-center mb-2">
       <input
         type="checkbox"
-        className="mr-2"
+        className="form-checkbox h-4 w-4 text-blue-500 rounded"
         checked={checked}
         onChange={onChange}
       />
-      <label>{label}</label>
+      <label className="ml-2">{label}</label>
     </div>
   );
 };

@@ -11,7 +11,9 @@ const TeamProfilesPage = ({ pageTitle, teamProfiles }) => {
   const { category, list } = location.state || {};
 
   // Log message if location state is null (using dataLoader to load all profiles)
-  if (!location.state) console.log("location.state is null because we are using dataLoader to load all profiles instead of a specific subset (this is fine)");
+  if (!location.state) {
+    console.log("location.state is null because we are using dataLoader to load all profiles instead of a specific subset (this is fine)");
+  }
 
   // Assign team profiles based on props or location state
   teamProfiles = teamProfiles ? teamProfiles : allTeamProfiles;
@@ -19,7 +21,13 @@ const TeamProfilesPage = ({ pageTitle, teamProfiles }) => {
   pageTitle = category ? category : pageTitle;
 
   return (
-    <TeamProfiles teamProfiles={teamProfiles} title={pageTitle} />
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      {/* Page Title */}
+      <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">{pageTitle}</h1>
+      
+      {/* TeamProfiles Component */}
+      <TeamProfiles teamProfiles={teamProfiles} title={pageTitle} />
+    </div>
   );
 };
 

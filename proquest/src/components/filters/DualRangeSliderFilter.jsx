@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import './DualRangeSliderFilter.css'; // Import your custom CSS for styling
 
 const DualRangeSliderFilter = ({ label, min, max, range, onRangeChange, unit }) => {
   const [minValue, setMinValue] = useState(range[0]);
@@ -56,41 +55,46 @@ const DualRangeSliderFilter = ({ label, min, max, range, onRangeChange, unit }) 
   };
 
   return (
-    <div className="dual-range-slider-container">
-      <h3 className="range-title">{label}</h3>
-      <div className="range-slider">
+    <div className="dual-range-slider-container max-w-md mx-auto mb-8">
+      <h3 className="range-title text-lg font-semibold mb-2">{label}</h3>
+      <div className="range-slider relative bg-gray-300 h-8 rounded-full overflow-hidden">
         <span
-          className="slider-track"
-          style={{ left: `${((minValue - min) / (max - min)) * 100}%`, width: `${((maxValue - minValue) / (max - min)) * 100}%` }}
+          className="slider-track absolute bg-blue-500 h-full"
+          style={{
+            left: `${((minValue - min) / (max - min)) * 100}%`,
+            width: `${((maxValue - minValue) / (max - min)) * 100}%`,
+          }}
         ></span>
         <input
           type="range"
-          className="min-slider"
+          className="min-slider absolute h-full appearance-none w-full bg-transparent"
           min={min}
           max={max}
           value={minValue}
           onChange={handleMinSliderChange}
-          style={{ zIndex: 2 }}
         />
         <input
           type="range"
-          className="max-slider"
+          className="max-slider absolute h-full appearance-none w-full bg-transparent"
           min={min}
           max={max}
           value={maxValue}
           onChange={handleMaxSliderChange}
-          style={{ zIndex: 2 }}
         />
-        <div className="tooltip min-tooltip">{`${unit}${minValue}`}</div>
-        <div className="tooltip max-tooltip">{`${unit}${maxValue}`}</div>
+        <div className="tooltip min-tooltip absolute top-0 left-0 -mt-8 bg-blue-500 text-white px-2 py-1 text-xs rounded">
+          {`${unit}${minValue}`}
+        </div>
+        <div className="tooltip max-tooltip absolute top-0 right-0 -mt-8 bg-blue-500 text-white px-2 py-1 text-xs rounded">
+          {`${unit}${maxValue}`}
+        </div>
       </div>
-      <div className="input-box">
+      <div className="input-box flex justify-between mt-2">
         <div className="min-box">
-          <div className="input-wrap">
-            <span className="input-addon">{unit}</span>
+          <div className="input-wrap flex items-center">
+            <span className="input-addon font-semibold">{unit}</span>
             <input
               type="text"
-              className="input-field min-input"
+              className="input-field w-16 px-2 py-1 text-center border rounded"
               value={minValue}
               min={min}
               max={max}
@@ -99,11 +103,11 @@ const DualRangeSliderFilter = ({ label, min, max, range, onRangeChange, unit }) 
           </div>
         </div>
         <div className="max-box">
-          <div className="input-wrap">
-            <span className="input-addon">{unit}</span>
+          <div className="input-wrap flex items-center">
+            <span className="input-addon font-semibold">{unit}</span>
             <input
               type="text"
-              className="input-field max-input"
+              className="input-field w-16 px-2 py-1 text-center border rounded"
               value={maxValue}
               min={min}
               max={max}
