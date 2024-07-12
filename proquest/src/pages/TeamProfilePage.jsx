@@ -172,7 +172,8 @@ const TeamProfilePage = () => {
     );
 };
 const teamLoader = async ({params}) => {
-    const teamUrl = `/api/teams/${params.id}`;
+    // const teamUrl = `/api/teams/${params.id}`;
+    const teamUrl = `https://proquest-pspc.onrender.com/api/teams/${params.id}`
     try {
       const team = await axios.get(teamUrl);
       console.log(team,"locader")
