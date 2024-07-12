@@ -2,25 +2,39 @@
 import React, { useState } from 'react';
 
 const ControlPanel = ({ onUpdateFormation }) => {
-  const [defenseLines, setDefenseLines] = useState([{ players: 1 }]);
-  const [midfieldLines, setMidfieldLines] = useState([{ players: 1 }]);
-  const [attackLines, setAttackLines] = useState([{ players: 1 }]);
+  const [defenseLines, setDefenseLines] = useState([{ players: [null] }]);
+  const [midfieldLines, setMidfieldLines] = useState([{ players: [null] }]);
+  const [attackLines, setAttackLines] = useState([{ players: [null] }]);
+  const [goalkeeperLine, setGoalkeeperLine] = useState([{ players: [null] }]);
 
   const handleLineChange = (lineType, index, value) => {
-    const updatedLines = [...(lineType === 'defense' ? defenseLines : lineType === 'midfield' ? midfieldLines : attackLines)];
-    updatedLines[index] = { players: parseInt(value, 10) };
+    let updatedLines = [...(lineType === 'defense' ? defenseLines : lineType === 'midfield' ? midfieldLines : attackLines)];
+    updatedLines[index] = { players: value ? new Array(parseInt(value, 10)).fill(null):[] };
     if (lineType === 'defense') setDefenseLines(updatedLines);
     if (lineType === 'midfield') setMidfieldLines(updatedLines);
     if (lineType === 'attack') setAttackLines(updatedLines);
   };
 
   const handleSubmit = () => {
-    onUpdateFormation({
-      defenseLines: defenseLines,
-      midfieldLines: midfieldLines,
-      attackLines: attackLines,
-    });
+    const formattedFormation = {
+      defenseLines: defenseLines.map(line => ({
+        players: line.players || []
+      })),
+      midfieldLines: midfieldLines.map(line => ({
+        players: line.players || []
+      })),
+      attackLines: attackLines.map(line => ({
+        players: line.players || []
+      })),
+      goalkeeperLine: goalkeeperLine.map(line => ({
+        players: line.players || []
+      }))
+    };
+    console.log(formattedFormation,"ff")
+  
+    onUpdateFormation(formattedFormation);
   };
+  
 
   return (
     <div className="control-panel p-4">
@@ -32,7 +46,7 @@ const ControlPanel = ({ onUpdateFormation }) => {
           <div key={index} className="flex mb-2">
             <input
               type="number"
-              value={line.players}
+              value={line.players.length}
               onChange={(e) => handleLineChange('attack', index, e.target.value)}
               className="border border-gray-300 rounded-md p-2 w-1/2"
               min="1"
@@ -46,7 +60,7 @@ const ControlPanel = ({ onUpdateFormation }) => {
           </div>
         ))}
         <button
-          onClick={() => setAttackLines([...attackLines, { players: 1 }])}
+          onClick={() => setAttackLines([...attackLines, { players: new Array(1).fill(null) }])}
           className="bg-green-500 text-white rounded-md py-2 px-4 hover:bg-green-600"
         >
           Add Attack Line
@@ -60,7 +74,7 @@ const ControlPanel = ({ onUpdateFormation }) => {
           <div key={index} className="flex mb-2">
             <input
               type="number"
-              value={line.players}
+              value={line.players.length}
               onChange={(e) => handleLineChange('midfield', index, e.target.value)}
               className="border border-gray-300 rounded-md p-2 w-1/2"
               min="1"
@@ -74,7 +88,7 @@ const ControlPanel = ({ onUpdateFormation }) => {
           </div>
         ))}
         <button
-          onClick={() => setMidfieldLines([...midfieldLines, { players: 1 }])}
+          onClick={() => setMidfieldLines([...midfieldLines, { players: new Array(1).fill(null) }])}
           className="bg-green-500 text-white rounded-md py-2 px-4 hover:bg-green-600"
         >
           Add Midfield Line
@@ -88,7 +102,7 @@ const ControlPanel = ({ onUpdateFormation }) => {
           <div key={index} className="flex mb-2">
             <input
               type="number"
-              value={line.players}
+              value={line.players.length}
               onChange={(e) => handleLineChange('defense', index, e.target.value)}
               className="border border-gray-300 rounded-md p-2 w-1/2"
               min="1"
@@ -102,7 +116,7 @@ const ControlPanel = ({ onUpdateFormation }) => {
           </div>
         ))}
         <button
-          onClick={() => setDefenseLines([...defenseLines, { players: 1 }])}
+          onClick={() => setDefenseLines([...defenseLines, { players: new Array(1).fill(null) }])}
           className="bg-green-500 text-white rounded-md py-2 px-4 hover:bg-green-600"
         >
           Add Defense Line
