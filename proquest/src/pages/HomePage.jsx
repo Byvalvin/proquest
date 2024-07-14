@@ -4,9 +4,13 @@ import Sections from '../components/Sections';
 import ViewingButton from '../components/ViewingButton';
 import PlayerProfiles from '../components/PlayerProfiles';
 import { useLoaderData } from 'react-router-dom';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const HomePage = () => {
-  const allplayerprofiles = useLoaderData(); // Ensure this fetches data correctly
+  const allplayerprofiles = useLoaderData(); // Ensure this fetches data correctly ß
+  if(!allplayerprofiles){
+    return <LoadingSpinner message='Fetching player profiles...'></LoadingSpinner>
+  }
   const engageto = "/players"; // Viewing button destination
 
   // Function to filter items based on numeric range

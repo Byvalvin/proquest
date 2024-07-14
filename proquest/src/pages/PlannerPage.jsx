@@ -4,6 +4,7 @@ import FormationDisplay from '../components/FormationDisplay';
 import PlayerList from '../components/PlayerList';
 import SearchBar from '../components/SearchBar'; // Import SearchBar component
 import { useLoaderData } from 'react-router-dom';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const PlannerPage = () => {
   const [formation, setFormation] = useState({
@@ -18,6 +19,9 @@ const PlannerPage = () => {
   const [currentBox, setCurrentBox] = useState(null);
 
   const [availablePlayers, setAvailablePlayers] = useState(useLoaderData());
+  if(!availablePlayers){
+    return <LoadingSpinner message='Fetching Players...'></LoadingSpinner>
+  }
   const [searchTerm, setSearchTerm] = useState(""); // State for search term
 
   useEffect(() => {

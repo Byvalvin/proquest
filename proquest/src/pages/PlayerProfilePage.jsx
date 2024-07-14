@@ -2,6 +2,7 @@ import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaArrowLeft, FaUser, FaVideo } from "react-icons/fa";
 import { toast } from "react-toastify";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const PlayerProfilePage = () => {
     const back = {
@@ -12,10 +13,9 @@ const PlayerProfilePage = () => {
     };
 
     const playerInfo = useLoaderData();
-
     // Render loading message while waiting for player data
-    if (!playerInfo) {
-        return <p>Loading player profile...</p>;
+    if(!playerInfo){
+        return <LoadingSpinner message="Fetching Player Data..."></LoadingSpinner>
     }
 
     // Destructure player info from state

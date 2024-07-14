@@ -3,6 +3,7 @@ import axios from "axios";
 import { FaArrowLeft, FaFutbol } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const TeamProfilePage = () => {
     const { id } = useParams();
@@ -52,7 +53,7 @@ const TeamProfilePage = () => {
     };
 
     if (loading) {
-        return <p className="text-center py-4">Loading team profile...</p>;
+        return <LoadingSpinner message="Loading team profile..."></LoadingSpinner>
     }
 
     if (!teamInfo) {
