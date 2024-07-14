@@ -3,6 +3,7 @@ import { FaFilter, FaTimes } from 'react-icons/fa';
 import SingleCheckFilter from './filters/SingleCheckFilter';
 import MultiSelectFilter from './filters/MultiSelectFilter';
 import DualRangeSliderFilter from './filters/DualRangeSliderFilter';
+import RDRSF from './filters/RDRSF';
 
 const Filter = ({ filters, setFilters }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -93,7 +94,7 @@ const Filter = ({ filters, setFilters }) => {
               <h3 className="text-lg font-semibold mb-2">Dual Range Slider Filters</h3>
               {openFilters.dualRangeSliderFilters.map((filter, index) => (
                 <div key={index} className="flex items-center justify-between mb-2">
-                  <DualRangeSliderFilter {...filter} />
+                  <RDRSF {...filter} />
                   <button
                     className="ml-2 text-gray-500 hover:text-gray-700 focus:outline-none"
                     onClick={() => removeFilter('dualRangeSliderFilters', index)}

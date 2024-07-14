@@ -1,0 +1,87 @@
+/*    width: calc(100% - 20px); /* Adjusted width to account for thumb width */
+/* Slider container */
+.horizontal-slider {
+    width: 100%;
+    height: 10px;
+    position: relative;
+  }
+  
+  /* Track (background of the slider) */
+  .track {
+    height: 100%;
+    position: absolute;
+    background: #cbd5e0; /* Default track color */
+    top: 0;
+    left: 0;
+  }
+
+/* Track colors for different ranges */
+.track.track-0, track.track-2 {
+    background: #cbd5e0; /* Blue track color */
+    }
+    .track.track-1{
+    background-color: #3182ce;
+    }
+      
+      
+
+  /* Thumb (slider handle) */
+  .thumb {
+    height: 20px;
+    width: 20px;
+    background-color: #3182ce; /* Adjust thumb color as needed */
+    cursor: grab;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-size: 0px; /* Adjust font size as needed */
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  /* Tooltip */
+  .tooltip {
+    position: absolute;
+    top: -30px;
+    background-color: #3182ce; /* Tooltip background color */
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    z-index: 10; /* Ensure tooltip is above the slider */
+  }
+  
+  /* Input box */
+  .input-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+    width: 100%; /* Ensure input boxes stay within the slider container */
+  }
+  
+  /* Input field */
+  .input-field {
+    width: 60px; /* Adjust width as needed */
+    padding: 4px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    appearance: none; /* Remove default arrows */
+  }
+  
+  .input-field::-webkit-outer-spin-button,
+  .input-field::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  .input-field[type="number"] {
+    -moz-appearance: textfield; /* Firefox */
+  }
+  
