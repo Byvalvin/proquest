@@ -1,10 +1,14 @@
 import React from 'react';
 import TeamProfiles from '../components/TeamProfiles'; // Adjust the path as needed
 import { useLoaderData, useLocation } from 'react-router-dom';
+import LoadingSpinner from "../components/LoadingSpinner"
 
 const TeamProfilesPage = ({ pageTitle, teamProfiles }) => {
   // Use useLoaderData hook to fetch all teams data
   const allTeamProfiles = useLoaderData();
+  if(!allTeamProfiles){
+    return <LoadingSpinner message="Fetching Teams Data..."></LoadingSpinner>
+  }
 
   // Get current location and state using useLocation hook
   const location = useLocation();

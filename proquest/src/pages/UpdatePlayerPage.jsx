@@ -3,9 +3,13 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import natData from '../nat.json';
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const UpdatePlayerPage = () => {
     const playerToUpdate = useLoaderData();
+    if(!playerToUpdate){
+        return <LoadingSpinner message="Fetching Player Data..."></LoadingSpinner>
+    }
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({

@@ -3,9 +3,14 @@ import { useLoaderData, useLocation } from 'react-router-dom';
 import SearchBar from '../components/SearchBar';
 import Filter from '../components/Filter';
 import PlayerProfiles from '../components/PlayerProfiles'; // Assuming PlayerProfiles component exists
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const PlayerProfilesPage = ({ pagetitle, playerprofiles }) => {
     const allplayerprofiles = useLoaderData();
+    if(!allplayerprofiles){
+        return <LoadingSpinner message='Fetching Player Data...'></LoadingSpinner>
+    }
+
     const location = useLocation();
     const { category, list } = location.state || {};
   
