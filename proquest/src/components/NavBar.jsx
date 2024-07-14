@@ -1,29 +1,31 @@
 import { NavLink } from 'react-router-dom';
-import { FaCrosshairs } from 'react-icons/fa';
+import { FaCrosshairs, FaBars } from 'react-icons/fa'; // Added FaBars for hamburger menu icon
 import { useLocation } from 'react-router-dom';
+import { useState } from 'react'; // Added useState for managing menu state
 
 const NavBar = () => {
   const APPNAME = 'ProQuest';
   const location = useLocation();
+  const [isOpen, setIsOpen] = useState(false); // State for toggling the menu
 
-      // const HLink = ({className, to,label}) =>{
-    //     const isActive = false
-    //     return(
-    //         <a href={to} className={`${className} ${isActive && "bg-black"}`}>
-    //             {label}
-    //         </a>
-    //     )
-    // }
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const closeMenu = () => {
+    setIsOpen(false);
+  };
 
   const NLink = ({ className, to, label }) => {
     const isActive = location.pathname === to;
-    const shouldHighlight = label !== APPNAME && isActive; // Highlight active link except for APPNAME, // dont hight the appname part
+    const shouldHighlight = label !== APPNAME && isActive;
 
     return (
       <NavLink
         to={to}
         className={`${className} ${shouldHighlight ? 'bg-black' : ''}`}
         activeClassName="bg-black"
+        onClick={closeMenu} // Close menu on link click (optional)
       >
         {label}
       </NavLink>
@@ -45,13 +47,26 @@ const NavBar = () => {
           <FaCrosshairs className="text-white text-3xl" />
           <NLink className="text-white text-xl font-bold" to="/" label={APPNAME} />
         </div>
-        <div className="flex space-x-4">
+
+        {/* Hamburger Menu Button */}
+        <div className="flex md:hidden"> {/* Show only on mobile */}
+          <button
+            onClick={toggleMenu}
+            className="text-white text-2xl focus:outline-none"
+            aria-label="Toggle navigation"
+          >
+            <FaBars />
+          </button>
+        </div>
+
+        {/* Navigation Links */}
+        <div className={`md:flex ${isOpen ? 'block' : 'hidden'} md:block space-x-4 mt-4 md:mt-0`}>
           {navelems.map((elem, index) => (
             <NLink
               key={index}
               to={elem.link}
               label={elem.label}
-              className="p-1 rounded-md text-white hover:text-gray-900 hover:bg-gray-100"
+              className="block md:inline-block p-1 rounded-md text-white hover:text-gray-900 hover:bg-gray-100"
             />
           ))}
         </div>
