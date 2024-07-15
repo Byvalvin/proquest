@@ -10,7 +10,7 @@ const PlannerPlayer = ({ player, onSelect }) => {
 
   return (
     <div
-      className={`flex flex-col items-center justify-between w-24 h-32 bg-${colour} border border-gray-300 rounded-md p-2 relative cursor-pointer shadow-sm hover:shadow-md transition-shadow duration-200`}
+      className={`flex flex-col items-center justify-between w-24 h-32 bg-pink-50 border border-gray-300 rounded-md p-2 relative cursor-pointer shadow-sm hover:shadow-md transition-shadow duration-200`}
       onClick={() => onSelect(player)}
     >
       {/* Top Section: Star Icon */}
