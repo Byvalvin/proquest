@@ -74,7 +74,8 @@ const UpdatePlayerPage = () => {
 
     const updatePlayer = async (player) => {
         try {
-            const updateURL = `https://proquest-pspc.onrender.com/api/players/${playerToUpdate._id}`;
+            const baseURLs = ["https://proquest-pspc.onrender.com","https://3b14d84e-bf47-4b87-a7d1-29985604422c-00-373hveltrbpzh.riker.replit.dev:8080"]
+            const updateURL = `${baseURLs[1]}/api/players/${playerToUpdate._id}`;
             const response = await axios.put(updateURL, player);
             return response.data;
         } catch (error) {

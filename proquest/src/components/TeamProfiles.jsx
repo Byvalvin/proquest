@@ -26,7 +26,8 @@ const TeamProfiles = ({ teamProfiles, title = "Explore Teams", isHomePage = fals
 const teamsLoader = async () => {
     try {
         //const allTeamsUrl = "/api/teams"; // Adjust the URL based on your API endpoint for teams
-        const allTeamsUrl = "https://proquest-pspc.onrender.com/api/teams"
+        const baseURLs = ["https://proquest-pspc.onrender.com","https://3b14d84e-bf47-4b87-a7d1-29985604422c-00-373hveltrbpzh.riker.replit.dev:8080"]
+        const allTeamsUrl = `${baseURLs[1]}/api/teams`
         const response = await axios.get(allTeamsUrl);
         return response.data.data; // Assuming your API returns data in a 'data' field
     } catch (error) {

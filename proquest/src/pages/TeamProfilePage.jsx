@@ -13,7 +13,8 @@ const TeamProfilePage = () => {
 
     useEffect(() => {
         const fetchTeam = async () => {
-            const url = `https://proquest-pspc.onrender.com/api/teams/${id}`;
+            const baseURLs = ["https://proquest-pspc.onrender.com","https://3b14d84e-bf47-4b87-a7d1-29985604422c-00-373hveltrbpzh.riker.replit.dev:8080"]
+            const url = `${baseURLs[1]}/api/teams/${id}`;
             try {
                 const response = await axios.get(url);
                 setTeamInfo(response.data.data);
@@ -41,7 +42,8 @@ const TeamProfilePage = () => {
             return;
         }
 
-        const delURL = `https://proquest-pspc.onrender.com/api/teams/${_id}`;
+        const baseURLs = ["https://proquest-pspc.onrender.com","https://3b14d84e-bf47-4b87-a7d1-29985604422c-00-373hveltrbpzh.riker.replit.dev:8080"]
+        const delURL = `${baseURLs[1]}/api/teams/${_id}`;
         try {
             await axios.delete(delURL);
             toast.success("Team removed successfully.");
@@ -173,7 +175,8 @@ const TeamProfilePage = () => {
 };
 
 const teamLoader = async ({ params }) => {
-    const teamUrl = `https://proquest-pspc.onrender.com/api/teams/${params.id}`;
+    const baseURLs = ["https://proquest-pspc.onrender.com","https://3b14d84e-bf47-4b87-a7d1-29985604422c-00-373hveltrbpzh.riker.replit.dev:8080"]
+    const teamUrl = `${baseURLs[1]}/api/teams/${params.id}`;
     try {
         const team = await axios.get(teamUrl);
         return team.data.data;
