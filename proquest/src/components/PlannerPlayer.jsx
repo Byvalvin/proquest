@@ -2,12 +2,15 @@ import React from 'react';
 import { FaUser, FaStar } from 'react-icons/fa';
 
 const PlannerPlayer = ({ player, onSelect }) => {
-  const { first, last, position, star, overall } = player;
+  const { first, last, position, gender, star, overall } = player;
   const preferredPosition = position?.preferred[0] || 'Unknown';
+
+  const colour = typeof gender === 'undefined' ? 'white' : gender ? 'blue-50' : 'pink-50';
+  console.log("my colour", colour, gender)
 
   return (
     <div
-      className="flex flex-col items-center justify-between w-24 h-32 bg-white border border-gray-300 rounded-md p-2 relative cursor-pointer shadow-sm hover:shadow-md transition-shadow duration-200"
+      className={`flex flex-col items-center justify-between w-24 h-32 bg-${colour} border border-gray-300 rounded-md p-2 relative cursor-pointer shadow-sm hover:shadow-md transition-shadow duration-200`}
       onClick={() => onSelect(player)}
     >
       {/* Top Section: Star Icon */}

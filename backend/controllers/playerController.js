@@ -69,8 +69,9 @@ const getPlayer = asyncHandler(async(request,response, next) => { // include nex
 
 const addPlayer = asyncHandler(async(request,response, next) => {
     // check post data
-    const {first,last,age,DOB,nationality,footedness,position,overall,estValue, team, specialities, weaknesses, description, review, views, star} = request.body
-    const player = {first,last,age,DOB,nationality,footedness,position,overall,estValue, team, specialities, weaknesses, description, review, views, star}
+   // console.log(request.body)
+    const {first,last,age,DOB,nationality,footedness,position,overall,estValue, team, specialities, weaknesses, description, review, views, gender, star} = request.body
+    const player = {first,last,age,DOB,nationality,footedness,position,overall,estValue, team, specialities, weaknesses, description, review, views, gender, star}
     
     if(!player.first || !player.last){
       const error = badRequestError("Failure: Player needs a first and a last name");

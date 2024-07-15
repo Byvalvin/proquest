@@ -83,8 +83,13 @@ const PlannerPage = () => {
   };
 
   const handleBoxClick = (lineType, lineIndex, playerIndex) => {
-    setCurrentBox({ lineType, lineIndex, playerIndex });
-    setShowPlayerList(true);
+    if(currentBox!==null && currentBox.lineType===lineType && currentBox.lineIndex===lineIndex && currentBox.playerIndex===playerIndex){
+      setCurrentBox(null);
+      setShowPlayerList(false);
+    }else{
+      setCurrentBox({ lineType, lineIndex, playerIndex });
+      setShowPlayerList(true);
+    }
   };
 
   const handleClosePlayerList = () => {
@@ -137,6 +142,7 @@ const PlannerPage = () => {
         <FormationDisplay
           formation={formation}
           onBoxClick={handleBoxClick}
+          playerListClosed={!showPlayerList}
           onPlayerRemove={handleRemovePlayer}
         />
       </main>

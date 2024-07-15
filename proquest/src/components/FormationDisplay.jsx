@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PlannerPlayer from './PlannerPlayer';
 
-const FormationDisplay = ({ formation, onBoxClick, onPlayerRemove }) => {
+const FormationDisplay = ({ formation, onBoxClick, playerListClosed, onPlayerRemove }) => {
   // Function to render a line of positions
+  const [boxSelected, setBoxSelected] = useState(null);
+  useEffect(()=>{
+    if(playerListClosed)setBoxSelected(null);
+  },[playerListClosed]);
+
   const renderLine = (line, lineType) => (
     <div key={lineType} className="flex flex-col items-center gap-4 mb-4">
       {line.map((lineItem, lineIndex) => (
@@ -15,7 +20,7 @@ const FormationDisplay = ({ formation, onBoxClick, onPlayerRemove }) => {
               >
                 <div
                   className="w-full h-full border border-gray-300 rounded-lg flex items-center justify-center cursor-pointer bg-gray-50 hover:bg-gray-100 relative"
-                  onClick={() => onBoxClick(lineType, lineIndex, playerIndex)}
+                  onClick={() => {setBoxSelected({lineType, lineIndex, playerIndex});onBoxClick(lineType, lineIndex, playerIndex)}}
                 >
                   {player ? (
                     <PlannerPlayer 
@@ -23,7 +28,7 @@ const FormationDisplay = ({ formation, onBoxClick, onPlayerRemove }) => {
                       onSelect={() => onPlayerRemove(lineType, lineIndex, playerIndex)} // Add onPlayerRemove handler
                     />
                   ) : (
-                    <span className="text-4xl font-bold">+</span>
+                    <span className="text-4xl font-bold">{boxSelected!==null && boxSelected.lineType===lineType && boxSelected.lineIndex===lineIndex&&boxSelected.playerIndex===playerIndex ? 'o':'+'}</span>
                   )}
                 </div>
               </div>
