@@ -50,7 +50,8 @@ const PlayerProfilePage = () => {
             return;
         }
 
-        const delURL = `/api/players/${_id}`;
+        const baseURLs = ["https://proquest-pspc.onrender.com","https://3b14d84e-bf47-4b87-a7d1-29985604422c-00-373hveltrbpzh.riker.replit.dev:8080"]
+        const delURL = `${baseURLs[0]}/api/players/${_id}`;
         try {
             const response = await axios.delete(delURL);
             console.log(response.data);

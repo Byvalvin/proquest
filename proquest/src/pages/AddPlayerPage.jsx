@@ -26,6 +26,7 @@ const AddPlayerPage = () => {
     review:"",
     views: 0,
     overall: 50.0,
+    gender: "",
     star: false
   };
       
@@ -46,6 +47,7 @@ const AddPlayerPage = () => {
   const [review, setReview] = useState(initialPlayerState.review);
   const [views, setViews] = useState(initialPlayerState.views); 
   const [overall, setOverall] = useState(initialPlayerState.overall); 
+  const [gender, setGender]= useState(initialPlayerState.gender);
   const [star, setStar] = useState(initialPlayerState.star);
 
   const [validNationalities, setValidNationalities] = useState([]);
@@ -118,6 +120,7 @@ const AddPlayerPage = () => {
     setReview(initialPlayerState.review);
     setViews(initialPlayerState.views);
     setOverall(initialPlayerState.overall);
+    setGender(initialPlayerState.gender);
     setStar(initialPlayerState.star);
   };
 
@@ -160,6 +163,7 @@ const AddPlayerPage = () => {
       review,
       views,
       overall,
+      gender: gender.toLowerCase() === "male" ? 1 : 0,
       star,
     };
     console.log("Form submitted with data:", newPlayer);
@@ -399,6 +403,19 @@ const AddPlayerPage = () => {
                 onChange={(e) => setOverall(e.target.value)}
                 className="border border-gray-300 rounded-lg px-3 py-2 mt-1 block w-full"
               />
+            </div>
+            <div className="mb-4">
+            <label htmlFor="gender" className="block text-sm font-medium text-gray-700">Gender</label>
+              <select
+                id="gender"
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+                className="border border-gray-300 rounded-lg px-3 py-2 mt-1 block w-full"
+              >
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
             </div>
             <div className="mb-4">
               <label htmlFor="star" className="block text-sm font-medium text-gray-700">Star</label>

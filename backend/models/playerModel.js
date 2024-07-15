@@ -29,6 +29,7 @@ const playerSchema = mongoose.Schema(
         description:{type:String, default:""},
         review:{type:String, default:""},
         views:{type:Number, default:0},
+        gender:{type:Number, default:1},
         star:{type:Boolean, default:false}
         
     },
