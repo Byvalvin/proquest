@@ -215,7 +215,7 @@ const PlannerPage = () => {
         console.log("clear spec")
         handleClearFormation()
       }
-      //setFormations(response.data.data)
+      setFormations(response.data.data)
     } catch (error) {
       console.log(error)
     }
