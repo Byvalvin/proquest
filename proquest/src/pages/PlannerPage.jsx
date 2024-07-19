@@ -211,7 +211,9 @@ const PlannerPage = () => {
     try {
       const response = await axios.delete(`${baseURLs[0]}/api/formations/${name}`)
       //console.log(response.data,response.data.data)
-      handleClearFormation()
+      if(formation.name===name){
+        handleClearFormation()
+      }
       setFormations(response.data.data)
     } catch (error) {
       console.log(error)
