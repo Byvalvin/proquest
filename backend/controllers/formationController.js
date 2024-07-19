@@ -81,7 +81,7 @@ const addFormation = asyncHandler(async(request,response, next) => {
 
 
 const deleteFormation = asyncHandler(async(request,response, next) => {
-    const name = request.body.name
+    const name = request.params.name
 
     try {
         // Find and delete the formation by name

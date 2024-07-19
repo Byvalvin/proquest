@@ -9,6 +9,7 @@ import mongoose from "mongoose";
 import connectDB from "./config/db.js";
 import players from "./routes/players.js";
 import teams from "./routes/teams.js"
+import formations from "./routes/formations.js";
 import nationalities from "./routes/nationalities.js";
 import {requestLogger, errorHandler, notFoundHandler} from "./middleware/middleware.js";
 import cors from 'cors'; // Import CORS middleware
@@ -44,6 +45,7 @@ server.use(requestLogger);
 server.use('/api/players',players);
 server.use('/api/teams', teams);
 server.use('/api/nationalities', nationalities);
+server.use('/api/formations', formations);
 
 // Middleware for endpoints that dont exist in API: MUST BE RIGHT AFTER ROUTES SO NON-EXTANT ROUTES ARE CAUGHT HERE
 server.use(notFoundHandler);

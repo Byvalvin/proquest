@@ -14,7 +14,7 @@ router.get('/', getFormations);
 router.post('/', addFormation);
 
 // delete formation by name
-router.delete('/', deleteFormation); //will use the request body to delete
+router.delete('/:name', deleteFormation); //will use the request body to delete
 
 
 export default router;
