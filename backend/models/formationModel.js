@@ -41,7 +41,7 @@ const formationSchema = mongoose.Schema(
 formationSchema.pre('save', async function (next) {
     // Only update _id if it's not set (i.e., during creation)
     if (!this._id) {
-        this._id = this.name.toLowerCase().replace(/\s+/g, '-'); // Example transformation
+        this._id = this.name.replace(/\s+/g, '-'); // Example transformation
     }
     next();
 });
