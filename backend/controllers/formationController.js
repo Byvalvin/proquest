@@ -90,8 +90,8 @@ const deleteFormation = asyncHandler(async(request,response, next) => {
             const error = notFoundError(`Failure: Formation with name ${name} was not found`);
             return next(error);
         }
-        console.log("f",await Formation.find())
-        response.status(204).json({msg:"Success", data: await Formation.find()})  
+        //console.log("f",await Formation.find())
+        response.status(200).json({msg:"Success", data: await Formation.find()})  
             
     } catch (error) {
         next(error)
