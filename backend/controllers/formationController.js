@@ -82,17 +82,14 @@ const addFormation = asyncHandler(async(request,response, next) => {
 
 const deleteFormation = asyncHandler(async(request,response, next) => {
     const name = request.params.name
-    console.log(request.params)
 
     try {
         // Find and delete the formation by name
         const formationToDelete = await Formation.findOneAndDelete({ name: name })
         if(!formationToDelete){
-            console.log("no form")
             const error = notFoundError(`Failure: Formation with name ${name} was not found`);
             return next(error);
         }
-        console.log("form",await Formation.find())
         response.status(204).json({msg:"Success", data: await Formation.find()})  
             
     } catch (error) {

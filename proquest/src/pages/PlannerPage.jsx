@@ -175,7 +175,7 @@ const PlannerPage = () => {
     const baseURLs = ["https://proquest-pspc.onrender.com","https://3b14d84e-bf47-4b87-a7d1-29985604422c-00-373hveltrbpzh.riker.replit.dev:8080"]
     try {
       const response = await axios.post(`${baseURLs[0]}/api/formations`,{...formation, name})
-      console.log(response.data)
+      //console.log(response.data)
       setFormations(response.data.data)
     } catch (error) {
       console.log(error)
@@ -210,7 +210,8 @@ const PlannerPage = () => {
     const baseURLs = ["https://proquest-pspc.onrender.com","https://3b14d84e-bf47-4b87-a7d1-29985604422c-00-373hveltrbpzh.riker.replit.dev:8080"]
     try {
       const response = await axios.delete(`${baseURLs[0]}/api/formations/${name}`)
-      console.log(response.data)
+      //console.log(response.data,response.data.data)
+      handleClearFormation()
       setFormations(response.data.data)
     } catch (error) {
       console.log(error)
