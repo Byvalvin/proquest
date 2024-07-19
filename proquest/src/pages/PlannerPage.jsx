@@ -33,12 +33,18 @@ const PlannerPage = () => {
   useEffect(()=>{
     const fetchFormations = async() =>{
       const baseURLs = ["https://proquest-pspc.onrender.com","https://3b14d84e-bf47-4b87-a7d1-29985604422c-00-373hveltrbpzh.riker.replit.dev:8080"]
-      const allFormationsUrl = `${baseURLs[0]}/api/formations`
-      const allFormations = await axios.get(allFormationsUrl)
-      setFormations(allFormations.data.data)
-    }
-    fetchFormations()
-  },[])
+      const allFormationsUrl = `${baseURLs[0]}/api/formations`;
+      
+      try {
+        const response = await axios.get(allFormationsUrl);
+        setFormations(response.data.data || []); // Ensure response.data.data is an array
+      } catch (error) {
+        console.error('Error fetching formations:', error);
+        setFormations([]); // Set to empty array if error occurs
+      }
+    };
+    fetchFormations();
+  }, []);
   const [isLoadedFormation, setIsLoadedFormation] = useState(false)
   const hasNullPlayers = () => {
     return formation.defenseLines.some(line => line.players.includes(null)) ||
