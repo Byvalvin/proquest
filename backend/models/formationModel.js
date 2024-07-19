@@ -19,7 +19,7 @@ const plannerPlayerSchema = mongoose.Schema({
 // Define formation schema
 const formationSchema = mongoose.Schema(
     {
-        _id: { type: String, default: "0" }, // Custom _id field
+        _id: { type: String, default: "" }, // Custom _id field
         name:{type:String, require:true, unique:true},
         defenseLines: [{
             players: [plannerPlayerSchema]
@@ -36,6 +36,15 @@ const formationSchema = mongoose.Schema(
     },
     { _id: false } // no _id should be added to sub docs
 );
+
+// Pre-save hook to update _id based on name
+formationSchema.pre('save', async function (next) {
+    // Only update _id if it's not set (i.e., during creation)
+    if (!this._id) {
+        this._id = this.name.toLowerCase().replace(/\s+/g, '-'); // Example transformation
+    }
+    next();
+});
 
 // Create and export Formation model
 const Formation = mongoose.model('Formation', formationSchema);
