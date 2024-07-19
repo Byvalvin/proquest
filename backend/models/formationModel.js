@@ -19,6 +19,7 @@ const plannerPlayerSchema = mongoose.Schema({
 // Define formation schema
 const formationSchema = mongoose.Schema(
     {
+        _id: { type: String, default: "0" }, // Custom _id field
         name:{type:String, require:true, unique:true},
         defenseLines: [{
             players: [plannerPlayerSchema]
