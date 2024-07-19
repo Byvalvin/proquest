@@ -5,24 +5,37 @@ import PlayerList from '../components/PlayerList';
 import SearchBar from '../components/SearchBar'; // Import SearchBar component
 import { useLoaderData } from 'react-router-dom';
 import LoadingSpinner from '../components/LoadingSpinner';
+import FormationManager from '../components/FormationManager';
+import { toast } from 'react-toastify';
 
 const PlannerPage = () => {
-  const [formation, setFormation] = useState({
+  const emptyFormation = {
     defenseLines: [{ players: [null] }],
     midfieldLines: [{ players: [null] }],
     attackLines: [{ players: [null] }],
     goalkeeperLine: [{ players: [null] }]
-  });
+  }
+  const [formation, setFormation] = useState(emptyFormation);
 
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [showPlayerList, setShowPlayerList] = useState(false);
   const [currentBox, setCurrentBox] = useState(null);
 
-  const [availablePlayers, setAvailablePlayers] = useState(useLoaderData());
-  if(!availablePlayers){
+  const allPlayers = useLoaderData()
+  if(!allPlayers){
     return <LoadingSpinner message='Fetching Players...'></LoadingSpinner>
   }
+  const [availablePlayers, setAvailablePlayers] = useState(allPlayers);
   const [searchTerm, setSearchTerm] = useState(""); // State for search term
+
+  const [formations, setFormations] = useState([]);
+  const [isLoadedFormation, setIsLoadedFormation] = useState(false)
+  const hasNullPlayers = () => {
+    return formation.defenseLines.some(line => line.players.includes(null)) ||
+        formation.midfieldLines.some(line => line.players.includes(null)) ||
+        formation.attackLines.some(line => line.players.includes(null)) ||
+        formation.goalkeeperLine.some(line => line.players.includes(null))
+  };
 
   useEffect(() => {
     if (selectedPlayer && currentBox) {
@@ -32,10 +45,13 @@ const PlannerPage = () => {
 
   const handleAddPlayer = (lineType, lineIndex, playerIndex) => {
     if (selectedPlayer) {
+      const {_id, first, last, position, overall, gender, star} = selectedPlayer
+      const plan_player = {_id, first, last, position, overall, gender, star}
       const newFormation = { ...formation };
       const line = lineType === "goalkeeper" ? newFormation[`${lineType}Line`][lineIndex] : newFormation[`${lineType}Lines`][lineIndex];
       const updatedPlayers = [...line.players];
-      updatedPlayers[playerIndex] = selectedPlayer;
+      // updatedPlayers[playerIndex] = selectedPlayer;
+      updatedPlayers[playerIndex] = plan_player
       if (lineType === "goalkeeper") {
         newFormation[`${lineType}Line`][lineIndex] = { players: updatedPlayers };
       } else {
@@ -55,6 +71,10 @@ const PlannerPage = () => {
 
   const handleRemovePlayer = (lineType, lineIndex, playerIndex) => {
     const playerToRemove = formation[lineType === "goalkeeper" ? `${lineType}Line` : `${lineType}Lines`][lineIndex].players[playerIndex];
+    if(isLoadedFormation){
+      toast.error("Cannot change saved formation")
+      return
+    }
     if (playerToRemove) {
       const newFormation = { ...formation };
       const line = lineType === "goalkeeper" ? newFormation[`${lineType}Line`][lineIndex] : newFormation[`${lineType}Lines`][lineIndex];
@@ -83,6 +103,10 @@ const PlannerPage = () => {
   };
 
   const handleBoxClick = (lineType, lineIndex, playerIndex) => {
+    if(isLoadedFormation){
+      toast.error("Cannot change saved formation")
+      return
+    }
     if(currentBox!==null && currentBox.lineType===lineType && currentBox.lineIndex===lineIndex && currentBox.playerIndex===playerIndex){
       setCurrentBox(null);
       setShowPlayerList(false);
@@ -123,6 +147,47 @@ const PlannerPage = () => {
     (player.position?.preferred[0] || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  //formation handling
+  const handleSaveFormation =(name)=>{
+    console.log(formation,"current")
+    
+    if(hasNullPlayers()){
+      toast.error("Cannot save an incomplete formation")
+      return
+    }
+    const updatedFormations = [...formations, {...formation, name}]
+    setFormations(updatedFormations)
+    setFormation(emptyFormation)
+    setAvailablePlayers(allPlayers)
+    console.log("saved", updatedFormations, formations)
+  }
+
+  const handleLoadFormation =(savedFormation)=>{
+    setFormation(savedFormation);
+    setAvailablePlayers(allPlayers)
+    setIsLoadedFormation(!isLoadedFormation)
+  }
+
+  const handleClearFormation = ()=>{
+    setIsLoadedFormation(!isLoadedFormation)
+    setFormation(emptyFormation)
+    setAvailablePlayers(allPlayers)
+  }
+
+  const handleDeleteFormation = (name)=>{
+    const updatedFormations = formations.filter((savedFormation)=>{
+      const deleted = savedFormation.name!==name
+      if(savedFormation.name===formation.name){
+        handleClearFormation()
+      }
+      return deleted
+    })
+    console.log(updatedFormations)
+    setFormations(updatedFormations)
+    
+  }
+
+ 
   return (
     <div className="flex flex-col lg:flex-row min-h-screen">
       <aside className="w-full lg:w-1/4 bg-gray-100 p-4 lg:p-6">
@@ -135,6 +200,17 @@ const PlannerPage = () => {
               onClose={handleClosePlayerList}
               className="max-h-[calc(100vh-120px)] overflow-y-auto"
             />
+          </div>
+        )}
+        {!showPlayerList && (
+          <div className="relative">
+            <FormationManager
+            onSaveFormation={handleSaveFormation}
+            formations={formations}
+            onLoadFormation={handleLoadFormation}
+            onClearFormation={handleClearFormation}
+            onDeleteFormation={handleDeleteFormation}
+             />
           </div>
         )}
       </aside>
