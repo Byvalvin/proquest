@@ -10,14 +10,14 @@ const FormationManager = ({
 }) => {
   const [formationName, setFormationName] = useState("");
 
-  const saveFormation = (event) => {
+  const saveFormation = async(event) => {
     event.preventDefault();
 
     if (!formationName.trim()) {
       alert("Please Enter A Formation Name.");
       return;
     }
-    onSaveFormation(formationName);
+    await onSaveFormation(formationName);
     setFormationName(""); // Clear the input after saving
   };
 
@@ -38,7 +38,7 @@ const FormationManager = ({
             </button>
             <FaTimes
               className="text-red-500 cursor-pointer"
-              onClick={() => onDeleteFormation(formation.name)}
+              onClick={async() => await onDeleteFormation(formation.name)}
             />
           </li>
         ))}
