@@ -68,7 +68,7 @@ const addFormation = asyncHandler(async(request,response, next) => {
         console.log(formation);
         const newFormation = await Formation.create(formation)
         if(newFormation){
-            response.status(201).json({name:formation.name})
+            response.status(201).json({name:formation.name, data: await Formation.find()})
         }else{
             return next(badRequestError("Invalid Formation data"));
         }
@@ -90,7 +90,7 @@ const deleteFormation = asyncHandler(async(request,response, next) => {
             const error = notFoundError(`Failure: Formation with name ${name} was not found`);
             return next(error);
         }
-        response.status(204).json({msg:"Success", data:{msg:"Success"}})  
+        response.status(204).json({msg:"Success", data: await Formation.find()})  
             
     } catch (error) {
         next(error)

@@ -7,6 +7,7 @@ import { useLoaderData } from 'react-router-dom';
 import LoadingSpinner from '../components/LoadingSpinner';
 import FormationManager from '../components/FormationManager';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const PlannerPage = () => {
   const emptyFormation = {
@@ -29,6 +30,15 @@ const PlannerPage = () => {
   const [searchTerm, setSearchTerm] = useState(""); // State for search term
 
   const [formations, setFormations] = useState([]);
+  useEffect(()=>{
+    const fetchFormations = async() =>{
+      const baseURLs = ["https://proquest-pspc.onrender.com","https://3b14d84e-bf47-4b87-a7d1-29985604422c-00-373hveltrbpzh.riker.replit.dev:8080"]
+      const allFormationsUrl = `${baseURLs[0]}/api/formations`
+      const allFormations = await axios.get(allFormationsUrl)
+      setFormations(allFormations.data.data)
+    }
+    fetchFormations()
+  },[])
   const [isLoadedFormation, setIsLoadedFormation] = useState(false)
   const hasNullPlayers = () => {
     return formation.defenseLines.some(line => line.players.includes(null)) ||
@@ -148,18 +158,25 @@ const PlannerPage = () => {
   );
 
   //formation handling
-  const handleSaveFormation =(name)=>{
+  const handleSaveFormation = async(name)=>{
     console.log(formation,"current")
     
     if(hasNullPlayers()){
       toast.error("Cannot save an incomplete formation")
       return
     }
-    const updatedFormations = [...formations, {...formation, name}]
-    setFormations(updatedFormations)
+    //const updatedFormations = [...formations, {...formation, name}]
+    const baseURLs = ["https://proquest-pspc.onrender.com","https://3b14d84e-bf47-4b87-a7d1-29985604422c-00-373hveltrbpzh.riker.replit.dev:8080"]
+    try {
+      const response = await axios.post(`${baseURLs[0]}/api/formations`,{...formation, name})
+      console.log(response.data)
+      setFormations(response.data.data)
+    } catch (error) {
+      console.log(error)
+    }
     setFormation(emptyFormation)
     setAvailablePlayers(allPlayers)
-    console.log("saved", updatedFormations, formations)
+    console.log("saved", formations)
   }
 
   const handleLoadFormation =(savedFormation)=>{
@@ -174,16 +191,24 @@ const PlannerPage = () => {
     setAvailablePlayers(allPlayers)
   }
 
-  const handleDeleteFormation = (name)=>{
-    const updatedFormations = formations.filter((savedFormation)=>{
-      const deleted = savedFormation.name!==name
-      if(savedFormation.name===formation.name){
-        handleClearFormation()
-      }
-      return deleted
-    })
-    console.log(updatedFormations)
-    setFormations(updatedFormations)
+  const handleDeleteFormation = async(name)=>{
+    // const updatedFormations = formations.filter((savedFormation)=>{
+    //   const deleted = savedFormation.name!==name
+    //   if(savedFormation.name===formation.name){
+    //     handleClearFormation()
+    //   }
+    //   return deleted
+    // })
+    // console.log(updatedFormations)
+    // setFormations(updatedFormations)
+    const baseURLs = ["https://proquest-pspc.onrender.com","https://3b14d84e-bf47-4b87-a7d1-29985604422c-00-373hveltrbpzh.riker.replit.dev:8080"]
+    try {
+      const response = await axios.delete(`${baseURLs[0]}/api/formations/${name}`)
+      console.log(response.data)
+      setFormations(response.data.data)
+    } catch (error) {
+      console.log(error)
+    }
     
   }
 
