@@ -43,6 +43,10 @@
     {
       "abbr": "CMR",
       "full": "Cameroon"
+    },
+    {
+      "abbr": "GHN",
+      "full": "Ghana"
     }
   ]
 }
