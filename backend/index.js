@@ -53,7 +53,8 @@ server.use(notFoundHandler);
 // Middleware for custom error handling: MUST BE BELOW ROUTES TO PREVENT CONFLICTS
 server.use(errorHandler)
 
-
+// Export as a Vercel handler
+export default server;
 
 // START SERVER on a port
-server.listen(port, ()=>console.log(`Server running on port ${port}`)); 
+//server.listen(port, ()=>console.log(`Server running on port ${port}`)); 
