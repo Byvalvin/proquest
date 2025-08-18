@@ -12,11 +12,11 @@
     ],
     "rewrites": [
       {
-        "source": "/api/(.*)",
+        "source": "/api/:path*",
         "destination": "/backend/api/index.js"
       },
       {
-        "source": "/(.*)",
+        "source": "/:path*",
         "destination": "/proquest/dist/index.html"
       }
     ]
