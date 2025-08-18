@@ -10,6 +10,7 @@ const ports = {
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/',
   plugins: [react()],
   server: {
     port: ports.app,
