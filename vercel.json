@@ -1,18 +1,7 @@
 {
     "version": 2,
-    "builds": [
-      {
-        "src": "proquest/package.json",
-        "use": "@vercel/static-build",
-        "config": {
-          "distDir": "proquest/dist"
-        }
-      },
-      {
-        "src": "backend/api/**/*.js",
-        "use": "@vercel/node"
-      }
-    ],
+    "buildCommand": "npm run vercel-build",
+    "outputDirectory": "proquest/dist",
     "routes": [
       {
         "src": "/api/(.*)",

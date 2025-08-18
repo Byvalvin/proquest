@@ -8,7 +8,8 @@
     "start:backend": "cd backend && npm run dev",
     "start:backend_pro": "cd backend && npm run start",
     "start:jsonserver": "cd proquest && npm run server",
-    "start:proquest": "cd proquest && npm run dev"
+    "start:proquest": "cd proquest && npm run dev",
+    "vercel-build": "cd proquest && npm install && npm run build"
   },
   "keywords": [],
   "author": "",
