@@ -8,13 +8,6 @@ const ports = {
   api:8080,
 }
 
-const baseURLs = {
-  applocal:`http://localhost:${ports.applocal}`,
-  apilocal:`http://localhost:${ports.apilocal}`,
-  app:"https://proquest-pspc.onrender.com/",
-  api:"https://proquest-pspc.onrender.com/",
-}
-
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],

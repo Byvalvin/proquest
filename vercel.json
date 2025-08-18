@@ -1,5 +1,9 @@
 {
     "version": 2,
+    "rewrites": [
+      { "source": "/api/(.*)", "destination": "/api/$1" },
+      { "source": "/(.*)", "destination": "/proquest/dist/index.html" }
+    ],
     "builds": [
       {
         "src": "proquest/package.json",
@@ -14,10 +18,6 @@
       {
         "src": "/api/(.*)",
         "dest": "backend/api/index.js"
-      },
-      {
-        "src": "/(.*)",
-        "dest": "/proquest/dist/index.html"
       }
     ]
   }
