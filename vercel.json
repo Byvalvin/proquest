@@ -4,7 +4,7 @@
       {
         "src": "proquest/package.json",
         "use": "@vercel/static-build",
-        "config": { "distDir": "proquest/dist" }
+        "config": { "distDir": "dist" }
       },
       {
         "src": "backend/api/index.js",
