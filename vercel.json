@@ -1,0 +1,27 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "proquest/vite.config.js",
+        "use": "@vercel/static-build",
+        "config": {
+          "distDir": "proquest/dist"
+        }
+      },
+      {
+        "src": "backend/api/**/*.js",
+        "use": "@vercel/node"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/api/(.*)",
+        "dest": "backend/api/index.js"
+      },
+      {
+        "src": "/(.*)",
+        "dest": "proquest/dist/index.html"
+      }
+    ]
+  }
+  
