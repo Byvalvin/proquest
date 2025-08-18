@@ -176,7 +176,7 @@ const TeamProfilePage = () => {
 
 const teamLoader = async ({ params }) => {
     const baseURLs = ["https://proquest-pspc.onrender.com","https://3b14d84e-bf47-4b87-a7d1-29985604422c-00-373hveltrbpzh.riker.replit.dev:8080"]
-    const teamUrl = `${baseURLs[0]}/api/teams/${params.id}`;
+    const teamUrl = `/api/teams/${params.id}`;
     try {
         const team = await axios.get(teamUrl);
         return team.data.data;
