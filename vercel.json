@@ -3,19 +3,24 @@
     "builds": [
       {
         "src": "proquest/package.json",
-        "use": "@vercel/static-build",
-        "config": { "distDir": "dist" }
+        "use": "@vercel/static-build"
       },
       {
         "src": "backend/api/index.js",
         "use": "@vercel/node"
       }
     ],
-    "cleanUrls": true,
-    "trailingSlash": false,
-    "rewrites": [
-      { "source": "/api/:path*", "destination": "/backend/api/index.js" },
-      { "source": "/:path*", "destination": "/proquest/dist/index.html" }
-    ]
+    "routes": [
+      {
+        "src": "/api/(.*)",
+        "dest": "backend/api/index.js"
+      },
+      {
+        "src": "/(.*)",
+        "dest": "proquest/dist/index.html"
+      }
+    ],
+    "buildCommand": "cd proquest && npm install && npm run build",
+    "outputDirectory": "proquest/dist"
   }
   
