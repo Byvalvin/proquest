@@ -33,7 +33,7 @@ const PlannerPage = () => {
   useEffect(()=>{
     const fetchFormations = async() =>{
       const baseURLs = ["https://proquest-pspc.onrender.com","https://3b14d84e-bf47-4b87-a7d1-29985604422c-00-373hveltrbpzh.riker.replit.dev:8080"]
-      const allFormationsUrl = `${baseURLs[0]}/api/formations`;
+      const allFormationsUrl = `/api/formations`;
       
       try {
         const response = await axios.get(allFormationsUrl);
@@ -174,7 +174,7 @@ const PlannerPage = () => {
     //const updatedFormations = [...formations, {...formation, name}]
     const baseURLs = ["https://proquest-pspc.onrender.com","https://3b14d84e-bf47-4b87-a7d1-29985604422c-00-373hveltrbpzh.riker.replit.dev:8080"]
     try {
-      const response = await axios.post(`${baseURLs[0]}/api/formations`,{...formation, name})
+      const response = await axios.post(`/api/formations`,{...formation, name})
       console.log(response.data)
       setFormations(response.data.data)
     } catch (error) {
@@ -209,7 +209,7 @@ const PlannerPage = () => {
     // setFormations(updatedFormations)
     const baseURLs = ["https://proquest-pspc.onrender.com","https://3b14d84e-bf47-4b87-a7d1-29985604422c-00-373hveltrbpzh.riker.replit.dev:8080"]
     try {
-      const response = await axios.delete(`${baseURLs[0]}/api/formations/${name}`)
+      const response = await axios.delete(`/api/formations/${name}`)
       //console.log(response,response.data,response.data.data,"ggg")
       if(formation.name===name){
         console.log("clear spec")

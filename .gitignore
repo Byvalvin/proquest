@@ -2,3 +2,5 @@ backend/node_modules/
 backend/.env
 proquest/build
 proquest/node_modules
+proquest/npmCACHE
+npmCACHE
