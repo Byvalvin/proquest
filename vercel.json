@@ -3,7 +3,10 @@
   "builds": [
     {
       "src": "proquest/package.json",
-      "use": "@vercel/static-build"
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "proquest/dist"
+      }
     },
     {
       "src": "backend/api/index.js",
@@ -17,7 +20,7 @@
     },
     {
       "source": "/(.*)",
-      "destination": "proquest/dist/index.html"
+      "destination": "/proquest/dist/index.html"
     }
   ]
 }
