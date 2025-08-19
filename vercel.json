@@ -18,6 +18,9 @@
       "source": "/api/(.*)",
       "destination": "/backend/api/index.js"
     },
-{ "source": "/(.*)", "destination": "/proquest/" }
+    {
+      "source": "/(.*)",
+      "destination": "/proquest/dist/index.html"
+    }
   ]
 }
