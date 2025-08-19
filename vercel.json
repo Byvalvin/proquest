@@ -19,8 +19,15 @@
       "destination": "/backend/api/index.js"
     },
     {
-      "source": "/(.*)",
-      "destination": "/proquest//"
+      "source": "/proquest/(.*)",
+      "destination": "/proquest/index.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/proquest/",
+      "permanent": true
     }
   ]
 }

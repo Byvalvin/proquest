@@ -10,7 +10,7 @@ const ports = {
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: './',
+  base: '/proquest/',
   plugins: [react()],
   server: {
     port: ports.app,
