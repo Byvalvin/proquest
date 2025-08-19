@@ -19,6 +19,5 @@
       "src": "/(.*)",
       "dest": "/proquest/dist/index.html"
     }
-  ],
-  "outputDirectory": "proquest/dist"
+  ]
 }
