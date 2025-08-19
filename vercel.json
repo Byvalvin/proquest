@@ -18,6 +18,10 @@
       "source": "/api/(.*)",
       "destination": "/backend/api/index.js"
     },
+     {
+      "source": "/proquest(/.*)?",
+      "destination": "/proquest/index.html"
+    },
     {
       "source": "/proquest/(.*)",
       "destination": "/proquest/index.html"
