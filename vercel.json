@@ -20,7 +20,7 @@
       },
       {
         "src": "/(.*)",
-        "dest": "proquest/dist/index.html"
+        "dest": "proquest/index.html"
       }
     ]
   }
