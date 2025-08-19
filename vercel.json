@@ -17,7 +17,7 @@
     },
     {
       "source": "/(.*)",
-      "destination": "/dist/index.html"
+      "destination": "proquest/dist/index.html"
     }
   ]
 }
