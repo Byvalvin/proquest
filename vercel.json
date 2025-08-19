@@ -1,27 +1,24 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "proquest/package.json",
-        "use": "@vercel/static-build",
-        "config": {
-          "distDir": "dist"
-        }
-      },
-      {
-        "src": "backend/api/index.js",
-        "use": "@vercel/node"
-      }
-    ],
-    "routes": [
-      {
-        "src": "/api/(.*)",
-        "dest": "backend/api/index.js"
-      },
-      {
-        "src": "/(.*)",
-        "dest": "proquest/index.html"
-      }
-    ]
-  }
-  
+  "version": 2,
+  "builds": [
+    {
+      "src": "proquest/package.json",
+      "use": "@vercel/static-build"
+    },
+    {
+      "src": "backend/api/index.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "backend/api/index.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/proquest/dist/index.html"
+    }
+  ],
+  "outputDirectory": "proquest/dist"
+}
