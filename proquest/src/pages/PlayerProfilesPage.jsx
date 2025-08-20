@@ -2,195 +2,123 @@ import React, { Suspense, useState } from 'react';
 import { useLoaderData, useLocation, Await } from 'react-router-dom';
 import SearchBar from '../components/SearchBar';
 import Filter from '../components/Filter';
-import PlayerProfiles from '../components/PlayerProfiles'; // Assuming PlayerProfiles component exists
+import PlayerProfiles from '../components/PlayerProfiles';
 import LoadingSpinner from '../components/LoadingSpinner';
 
-const PlayerProfilesPage = ({ pagetitle, playerprofiles }) => {
-    const allplayerprofiles = useLoaderData();
-    if(!allplayerprofiles){
-        return <LoadingSpinner message='Fetching Player Data...'></LoadingSpinner>
+const PlayerProfilesPage = ({ pagetitle }) => {
+  const { allplayerprofiles } = useLoaderData(); // ← this is a Promise
+  const location = useLocation();
+  const { category, list } = location.state || {};
+
+  const [search, setSearch] = useState("");
+  const [filters, setFilters] = useState({
+    singleCheckFilters: [
+      {
+        label: 'Starred Players',
+        checked: false,
+        onChange: (e) => handleSingleCheckFilterChange(e, 'star'),
+      },
+    ],
+    multiSelectFilters: [
+      // Your filters (specialities, position A/B, etc.)
+    ],
+    dualRangeSliderFilters: [
+      {
+        label: 'overall',
+        min: 0,
+        max: 100,
+        range: [0, 100],
+        onRangeChange: (range) => handleDualRangeSliderFilterChange(range, 'overall'),
+      },
+    ],
+  });
+
+  const handleSingleCheckFilterChange = (event, type) => {
+    const updated = [...filters.singleCheckFilters];
+    updated[0].checked = event.target.checked;
+    setFilters({ ...filters, singleCheckFilters: updated });
+  };
+
+  const handleMultiSelectFilterChange = (type, selectedValues) => {
+    const updated = [...filters.multiSelectFilters];
+    const idx = updated.findIndex((f) => f.label.toLowerCase() === type);
+    updated[idx].selectedValues = selectedValues;
+    setFilters({ ...filters, multiSelectFilters: updated });
+  };
+
+  const handleDualRangeSliderFilterChange = (range, type) => {
+    const updated = [...filters.dualRangeSliderFilters];
+    const idx = updated.findIndex((f) => f.label.toLowerCase() === type);
+    updated[idx].range = range;
+    setFilters({ ...filters, dualRangeSliderFilters: updated });
+  };
+
+  const compareSubStrings = (entry, compStrs) => {
+    const lcEntry = entry.toLowerCase();
+    return compStrs.some((str) => str.toLowerCase().startsWith(lcEntry));
+  };
+
+  const searchFilter = (profiles) => {
+    return profiles.filter((profile) =>
+      !search || compareSubStrings(search, [profile.first, profile.last, profile.team])
+    );
+  };
+
+  const applyFilters = (profiles) => {
+    let result = [...profiles];
+
+    // Single check filter
+    if (filters.singleCheckFilters[0].checked) {
+      result = result.filter((p) => p.star);
     }
 
-    const location = useLocation();
-    const { category, list } = location.state || {};
-  
-    // Search Bar
-    const [search, setSearch] = useState(""); // Search term
-  
-    // State for filters
-    const [filters, setFilters] = useState({
-        singleCheckFilters: [
-            {
-                label: 'Starred Players',
-                checked: false, // Initial checked state
-                onChange: (e) => handleSingleCheckFilterChange(e, 'star'), // Handler function
-            },
-        ],
-        multiSelectFilters: [
-            {
-                label: 'Specialities',
-                options: [
-                    { value: 'dribbling', label: 'Dribbling', map: ['dribbler', 'dribbling'] },
-                    { value: 'finishing', label: 'Finishing', map: ['finisher', 'finishing', 'poacher', 'goal scorer'] },
-                    { value: 'defending', label: 'Defending', map: ['defending'] },
-                    { value: 'shooting', label: 'Shooting', map: ['shooter', 'shooting', 'long shots', 'shot power', 'distance shooter', 'finesse'] },
-                    { value: 'passing', label: 'Passing', map: ['playmaker', 'passing'] },
-                    { value: 'speed', label: 'Speed', map: ['speed', 'speedster'] },
-                    { value: 'strength', label: 'Strength', map: ['strength'] },
-                    { value: 'vision', label: 'Vision', map: ['playmaker', 'controller', 'vision'] },
-                    // Add more options as needed
-                ],
-                selectedValues: [], // Initial selected values
-                onChange: (selectedValues) => handleMultiSelectFilterChange('specialities', selectedValues), // Handler function
-            },
-            {
-                label: 'Position A',
-                options: [
-                    { value: 'A', label: 'Attackers', map: ['ST', 'CF', 'LW', 'RW'] },
-                    { value: 'M', label: 'Midfielders', map: ['CDM', 'CM', 'LM', 'RM', 'CAM'] },
-                    { value: 'D', label: 'Defenders', map: ['CB', 'LB', 'LWB', 'RB', 'RWB'] },
-                    { value: 'G', label: 'Goalkeepers', map: ['GK'] },
-                    // Add more options as needed
-                ],
-                selectedValues: [], // Initial selected values
-                onChange: (selectedValues) => handleMultiSelectFilterChange('position a', selectedValues), // Handler function
-            },
-            {
-                label: 'Position B',
-                options: [
-                    { value: 'st', label: 'ST', map: ['ST', 'CF'] },
-                    { value: 'cm', label: 'CM', map: ['CDM', 'CM', 'CAM'] },
-                    { value: 'cb', label: 'CB', map: ['CB', 'LB', 'RB'] },
-                    { value: 'lm', label: 'LM', map: ['LW', 'LM'] },
-                    { value: 'rm', label: 'RM', map: ['RW', 'RM'] },
-                    { value: 'G', label: 'Goalkeepers', map: ['GK'] },
-                    // Add more options as needed
-                ],
-                selectedValues: [], // Initial selected values
-                onChange: (selectedValues) => handleMultiSelectFilterChange('position b', selectedValues), // Handler function
-            },
-        ],
-        dualRangeSliderFilters: [
-            {
-                label: 'overall',
-                min: 0,
-                max: 100,
-                range: [0, 100], // Initial range values
-                onRangeChange: (range) => handleDualRangeSliderFilterChange(range, 'overall'), // Handler function
-            },
-        ],
+    // Multi-select filters
+    filters.multiSelectFilters.forEach((filter) => {
+      if (filter.selectedValues.length > 0) {
+        result = result.filter((profile) => {
+          const key = filter.label.split(" ")[0].toLowerCase();
+          const attrList = key === "position" ? profile[key]?.preferred || [] : profile[key] || [];
+
+          const selected = filter.options.filter((opt) =>
+            filter.selectedValues.includes(opt.value)
+          );
+          const selectables = selected.flatMap((s) => s.map).map((s) => s.toLowerCase());
+
+          return attrList?.some((attr) => selectables.includes(attr.toLowerCase()));
+        });
+      }
     });
-  
-    // Handle single check filter change
-    const handleSingleCheckFilterChange = (event, type) => {
-        const checked = event.target.checked;
-        const updatedFilters = [...filters.singleCheckFilters];
-        updatedFilters[0].checked = checked;
-        setFilters({ ...filters, singleCheckFilters: updatedFilters });
-    };
-  
-    // Handle multi-select filter change
-    const handleMultiSelectFilterChange = (type, selectedValues) => {
-        const updatedFilters = [...filters.multiSelectFilters];
-        const filterIndex = updatedFilters.findIndex((filter) => filter.label.toLowerCase() === type);
-        updatedFilters[filterIndex].selectedValues = selectedValues;
-        setFilters({ ...filters, multiSelectFilters: updatedFilters });
-    };
-  
-    // Handle dual range slider filter change
-    const handleDualRangeSliderFilterChange = (range, type) => {
-        const updatedFilters = [...filters.dualRangeSliderFilters];
-        const filterIndex = updatedFilters.findIndex((filter) => filter.label.toLowerCase() === type);
-        updatedFilters[filterIndex].range = range;
-        setFilters({ ...filters, dualRangeSliderFilters: updatedFilters });
-    };
 
-    // Helper function to check if entry is a substring of any comparison strings
-    const compareSubStrings = (entry, compStrs) => {
-        const lcEntry = entry.toLowerCase();
-        return compStrs.some(compStr => {
-            const lcCompStr = compStr.toLowerCase();
-            return lcCompStr.startsWith(lcEntry);
-        });
-    };
+    // Dual range filter
+    filters.dualRangeSliderFilters.forEach((filter) => {
+      result = result.filter((p) =>
+        filter.range[0] <= p.overall && p.overall <= filter.range[1]
+      );
+    });
 
-    // Apply search filter
-    const searchFilter = (profiles) => {
-        return profiles.filter((profile) =>
-            !search || search && compareSubStrings(search, [profile.first, profile.last, profile.team])
-        );
-    };
-  
-    // Apply filters function
-    const applyFilters = () => {
-        let filteredProfiles = playerprofiles ? [...playerprofiles] : [...allplayerprofiles];
-        filteredProfiles = list ? list : filteredProfiles;
-  
-        // Apply single check filter (starred players)
-        if (filters.singleCheckFilters[0].checked) {
-            filteredProfiles = filteredProfiles.filter((profile) => profile.star);
-        }
-  
-        // Apply multi-select filters (specialities, position, etc.)
-        filters.multiSelectFilters.forEach((filter) => {
-            if (filter.selectedValues.length > 0) {
-                filteredProfiles = filteredProfiles.filter((profile) => {
-                    const player_field = filter.label.split(" ")[0].toLowerCase();
-                    const profileAttributeList = player_field === "position" ? profile[player_field].preferred : profile[player_field];
-                    const selectedValues = filter.selectedValues.map(value => value.toLowerCase());
-                    const selectedValuesObjects = filter.options.filter((obj) => selectedValues.includes(obj.value.toLowerCase()));
-                    let selectables = [];
-                    selectedValuesObjects.forEach((svo) => selectables = selectables.concat(svo.map));
-                    selectables = selectables.map((selectable) => selectable.toLowerCase());
-                    return profileAttributeList.some(attr => selectables.includes(attr.toLowerCase()));
-                });
-            }
-        });
-  
-        // Apply dual range slider filter (overall rating)
-        filters.dualRangeSliderFilters.forEach(filter => {
-            filteredProfiles = filteredProfiles.filter((profile) =>
-                filter.range[0] <= profile.overall && profile.overall <= filter.range[1]
-            );
-        });
-  
-        return filteredProfiles;
-    };
+    return result;
+  };
 
-    const searchAndFilter = () => searchFilter(applyFilters());
+  const pagetitleFinal = category || pagetitle || "All Players";
 
-    const onSearchBarChange = (event) => {
-        setSearch(event.target.value);
-    };
-    
-    const filteredProfiles = searchAndFilter();
-  
-    pagetitle = category ? category : pagetitle;
-  
-    return (
-      <>
-        <SearchBar value={search} onChange={onSearchBarChange} />
-        <Filter filters={filters} setFilters={setFilters} />
-        <Suspense fallback={<LoadingSpinner message="Loading all players..." />}>
-            <Await
-            resolve={allplayerprofiles}
-            errorElement={<p className="text-red-500 text-center">Failed to load players.</p>}
-            >
-            {(resolvedProfiles) => {
-                const initialList = list || resolvedProfiles;
-                const filteredProfiles = searchFilter(applyFilters(initialList));
-
-                return (
-                <PlayerProfiles
-                    playerprofiles={filteredProfiles}
-                    title={pagetitle || "All Players"}
-                />
-                );
-            }}
-            </Await>
-        </Suspense>
-      </>
-    );
+  return (
+    <>
+      <SearchBar value={search} onChange={(e) => setSearch(e.target.value)} />
+      <Filter filters={filters} setFilters={setFilters} />
+      <Suspense fallback={<LoadingSpinner message="Loading all players..." />}>
+        <Await
+          resolve={allplayerprofiles}
+          errorElement={<p className="text-red-500 text-center">Failed to load players.</p>}
+        >
+          {(resolvedProfiles) => {
+            const baseProfiles = list || resolvedProfiles;
+            const filtered = searchFilter(applyFilters(baseProfiles));
+            return <PlayerProfiles playerprofiles={filtered} title={pagetitleFinal} />;
+          }}
+        </Await>
+      </Suspense>
+    </>
+  );
 };
 
 export default PlayerProfilesPage;
