@@ -1,5 +1,5 @@
 import React, { Suspense, useState } from 'react';
-import { useLoaderData, useLocation } from 'react-router-dom';
+import { useLoaderData, useLocation, Await } from 'react-router-dom';
 import SearchBar from '../components/SearchBar';
 import Filter from '../components/Filter';
 import PlayerProfiles from '../components/PlayerProfiles'; // Assuming PlayerProfiles component exists
