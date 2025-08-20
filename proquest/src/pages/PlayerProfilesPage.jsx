@@ -19,9 +19,49 @@ const PlayerProfilesPage = ({ pagetitle }) => {
         onChange: (e) => handleSingleCheckFilterChange(e, 'star'),
       },
     ],
+
     multiSelectFilters: [
-      // Your filters (specialities, position A/B, etc.)
+        {
+            label: 'Specialities',
+            options: [
+            { value: 'dribbling', label: 'Dribbling', map: ['dribbler', 'dribbling'] },
+            { value: 'finishing', label: 'Finishing', map: ['finisher', 'finishing', 'poacher', 'goal scorer'] },
+            { value: 'defending', label: 'Defending', map: ['defending'] },
+            { value: 'shooting', label: 'Shooting', map: ['shooter', 'shooting', 'long shots', 'shot power', 'distance shooter', 'finesse'] },
+            { value: 'passing', label: 'Passing', map: ['playmaker', 'passing'] },
+            { value: 'speed', label: 'Speed', map: ['speed', 'speedster'] },
+            { value: 'strength', label: 'Strength', map: ['strength'] },
+            { value: 'vision', label: 'Vision', map: ['playmaker', 'controller', 'vision'] },
+            ],
+            selectedValues: [],
+            onChange: (selectedValues) => handleMultiSelectFilterChange('specialities', selectedValues),
+        },
+        {
+            label: 'Position A',
+            options: [
+            { value: 'A', label: 'Attackers', map: ['ST', 'CF', 'LW', 'RW'] },
+            { value: 'M', label: 'Midfielders', map: ['CDM', 'CM', 'LM', 'RM', 'CAM'] },
+            { value: 'D', label: 'Defenders', map: ['CB', 'LB', 'LWB', 'RB', 'RWB'] },
+            { value: 'G', label: 'Goalkeepers', map: ['GK'] },
+            ],
+            selectedValues: [],
+            onChange: (selectedValues) => handleMultiSelectFilterChange('position a', selectedValues),
+        },
+        {
+            label: 'Position B',
+            options: [
+            { value: 'st', label: 'ST', map: ['ST', 'CF'] },
+            { value: 'cm', label: 'CM', map: ['CDM', 'CM', 'CAM'] },
+            { value: 'cb', label: 'CB', map: ['CB', 'LB', 'RB'] },
+            { value: 'lm', label: 'LM', map: ['LW', 'LM'] },
+            { value: 'rm', label: 'RM', map: ['RW', 'RM'] },
+            { value: 'G', label: 'Goalkeepers', map: ['GK'] },
+            ],
+            selectedValues: [],
+            onChange: (selectedValues) => handleMultiSelectFilterChange('position b', selectedValues),
+        },
     ],
+
     dualRangeSliderFilters: [
       {
         label: 'overall',

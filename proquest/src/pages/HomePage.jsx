@@ -49,15 +49,16 @@ const HomePage = () => {
             {(data) => (
               <>
                 {featured.map((filter, idx) => {
-                  const list = process(data, filter).slice(0, 3);
+                  const fullList = process(data, filter); // all filtered players
+                  const previewList = fullList.slice(0, 3); // just top 3 for display
                   return (
                     <div key={idx} className="my-12">
                       <PlayerProfiles
-                        playerprofiles={list}
+                        playerprofiles={previewList}
                         title={filter.name}
                         isHomePage={true}
                       />
-                      <ViewingButton to="/players" category={filter.name} list={list} />
+                      <ViewingButton to="/players" category={filter.name} list={fullList} />
                     </div>
                   );
                 })}
