@@ -6,9 +6,13 @@ const ViewingButton = ({ to, category, list }) => {
     // console.log(list)
     return (
         <section className="m-auto max-w-lg my-10 px-6">
-            <Link to={to} state={{ category, list }} className="block bg-black text-white text-center py-4 px-6 rounded-xl hover:bg-gray-700">
+            <Link
+            to={to}
+            state={{ category }} // Don't pass full list
+            className="block bg-black text-white text-center py-4 px-6 rounded-xl hover:bg-gray-700">
                 View {category}
             </Link>
+
         </section>
     );
 }

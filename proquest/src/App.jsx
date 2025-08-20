@@ -18,6 +18,7 @@ import TeamProfilesPage from './pages/TeamProfilesPage';
 import { teamsLoader } from './components/TeamProfiles';
 import PlannerPage from './pages/PlannerPage';
 import AddTeamPage from './pages/AddTeamPage';
+import UpdateTeamPage from './pages/UpdateTeamPage';
 import JoinNetworkPage from './pages/JoinNetworkPage';
 
 const App = () => {
@@ -30,6 +31,7 @@ const App = () => {
         <Route path='players/update/:id' element={<UpdatePlayerPage />} loader={playerLoader} />
         <Route path='teams' element={<TeamProfilesPage />} loader={teamsLoader} />
         <Route path='teams/:id' element={<TeamProfilePage />} loader={teamLoader} />
+        <Route path="teams/update/:id" element={<UpdateTeamPage />} loader={teamLoader} />
         <Route path='join' element={<JoinNetworkPage />} />
         <Route path='join/player' element={<AddPlayerPage />} />
         <Route path='join/team' element={<AddTeamPage />} />

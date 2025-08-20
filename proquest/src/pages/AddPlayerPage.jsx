@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; // to redirect to other page after submit
 import { toast } from "react-toastify";
-import natData from '../nat.json';
+// import natData from '../nat.json';
 
 const AddPlayerPage = () => {
   
@@ -70,16 +70,29 @@ const AddPlayerPage = () => {
 
     fetchData();
   }, []);
+  
 
-  const getNationalities = () => {
+  // const getNationalities = () => {
+  //   try {
+  //     const nationalities = natData.nationalities;
+  //     return nationalities.map((nat) => nat.abbr);
+  //   } catch (error) {
+  //     console.error("Error fetching nationalities:", error);
+  //     return [];
+  //   }
+  // };
+
+  const getNationalities = async () => {
     try {
-      const nationalities = natData.nationalities;
-      return nationalities.map((nat) => nat.abbr);
+      const response = await fetch("/nat.json");
+      const data = await response.json();
+      return data.nationalities.map(n => n.abbr);
     } catch (error) {
-      console.error("Error fetching nationalities:", error);
+      console.error("Error loading nationalities:", error);
       return [];
     }
   };
+
 
   const getTeamNames = async () => {
     try {

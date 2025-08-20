@@ -41,7 +41,8 @@ const getTeam = asyncHandler(async(request, response, next)=>{
 })
 
 const addTeam = asyncHandler(async(request, response, next)=>{
-    const { name, year, roster, rating, performance, baseValue, value } = request.body
+    let { name, year, roster, rating, performance, baseValue, value } = request.body
+    year = Number(year);
     const team = { name, year, roster, rating, performance, baseValue, value }
 
     if(!name){
