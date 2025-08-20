@@ -172,8 +172,21 @@ const PlayerProfilesPage = ({ pagetitle, playerprofiles }) => {
         <SearchBar value={search} onChange={onSearchBarChange} />
         <Filter filters={filters} setFilters={setFilters} />
         <Suspense fallback={<LoadingSpinner message="Loading all players..." />}>
-            <Await resolve={allplayerprofiles} errorElement={<p className="text-red-500 text-center">Failed to load players.</p>}>
-                <PlayerProfiles playerprofiles={filteredProfiles} title={pagetitle} />
+            <Await
+            resolve={allplayerprofiles}
+            errorElement={<p className="text-red-500 text-center">Failed to load players.</p>}
+            >
+            {(resolvedProfiles) => {
+                const initialList = list || resolvedProfiles;
+                const filteredProfiles = searchFilter(applyFilters(initialList));
+
+                return (
+                <PlayerProfiles
+                    playerprofiles={filteredProfiles}
+                    title={pagetitle || "All Players"}
+                />
+                );
+            }}
             </Await>
         </Suspense>
       </>
