@@ -23,13 +23,6 @@ const PlayerProfiles = ({ playerprofiles, title = "Scan Talents", isHomePage = f
 };
 
 
-// const playersLoader = async() =>{
-//     //const allPlayersUrl = "/api/players"
-//     const baseURLs = ["https://proquest-pspc.onrender.com","https://3b14d84e-bf47-4b87-a7d1-29985604422c-00-373hveltrbpzh.riker.replit.dev:8080"]
-//     const allPlayersUrl = `/api/players`
-//     const allPlayers = await axios.get(allPlayersUrl)
-//     return allPlayers.data.data
-// }
 const playersLoader = async () => {
   const playerPromise = axios.get("/api/players").then(res => res.data.data);
   return defer({ allplayerprofiles: playerPromise });

@@ -85,24 +85,32 @@ const HomePage = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <Suspense fallback={<LoadingSpinner message="Loading players..." />}>
           <Await resolve={allplayerprofiles}>
-            {(data) => (
-              <>
-                {featured.map((filter, idx) => {
-                  const list = engagementPipeline(data, filter).slice(0, 3); // Show 3 players
-                  return (
-                    <div key={idx} className="my-12">
-                      <PlayerProfiles
-                        playerprofiles={list}
-                        title={filter.name}
-                        isHomePage={true}
-                      />
-                      <ViewingButton to="/players" category={filter.name} list={list} />
-                    </div>
-                  );
-                })}
-              </>
-            )}
+            {(data) => {
+              if (!Array.isArray(data)) {
+                console.error("Expected player data to be an array, but got:", data);
+                return <p className="text-center text-red-600">Failed to load player data.</p>;
+              }
+
+              return (
+                <>
+                  {featured.map((filter, idx) => {
+                    const list = engagementPipeline(data, filter).slice(0, 3);
+                    return (
+                      <div key={idx} className="my-12">
+                        <PlayerProfiles
+                          playerprofiles={list}
+                          title={filter.name}
+                          isHomePage={true}
+                        />
+                        <ViewingButton to="/players" category={filter.name} list={list} />
+                      </div>
+                    );
+                  })}
+                </>
+              );
+            }}
           </Await>
+
         </Suspense>
       </div>
     </>
