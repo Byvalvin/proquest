@@ -8,7 +8,7 @@ const ViewingButton = ({ to, category, list }) => {
         <section className="m-auto max-w-lg my-10 px-6">
             <Link
             to={to}
-            state={{ category }} // Don't pass full list
+            state={{ category, list }} // Don't pass full list
             className="block bg-black text-white text-center py-4 px-6 rounded-xl hover:bg-gray-700">
                 View {category}
             </Link>
