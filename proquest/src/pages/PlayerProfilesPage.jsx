@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import { useLoaderData, useLocation } from 'react-router-dom';
 import SearchBar from '../components/SearchBar';
 import Filter from '../components/Filter';
@@ -171,7 +171,11 @@ const PlayerProfilesPage = ({ pagetitle, playerprofiles }) => {
       <>
         <SearchBar value={search} onChange={onSearchBarChange} />
         <Filter filters={filters} setFilters={setFilters} />
-        <PlayerProfiles playerprofiles={filteredProfiles} title={pagetitle} />
+        <Suspense fallback={<LoadingSpinner message="Loading all players..." />}>
+            <Await resolve={allplayerprofiles} errorElement={<p className="text-red-500 text-center">Failed to load players.</p>}>
+                <PlayerProfiles playerprofiles={filteredProfiles} title={pagetitle} />
+            </Await>
+        </Suspense>
       </>
     );
 };
