@@ -84,7 +84,7 @@ const AddPlayerPage = () => {
 
   const getNationalities = async () => {
     try {
-      const response = await fetch("/nat.json");
+      const response = await fetch("/proquest/nat.json");
       const data = await response.json();
       return data.nationalities.map(n => n.abbr);
     } catch (error) {
