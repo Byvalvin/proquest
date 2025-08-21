@@ -2,13 +2,13 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; // to redirect to other page after submit
 import { toast } from "react-toastify";
-// import natData from '../nat.json';
 
 const getDaysInMonth = (year, month) => {
-  if (!year || !month) return 31;
-  return new Date(year, month, 0).getDate(); // JS months are 1-based here
+  const y = parseInt(year);
+  const m = parseInt(month);
+  if (!y || !m || isNaN(y) || isNaN(m)) return 31; // fallback to 31
+  return new Date(y, m, 0).getDate();
 };
-
 
 const AddPlayerPage = () => {
   
@@ -77,17 +77,6 @@ const AddPlayerPage = () => {
     fetchData();
   }, []);
   
-
-  // const getNationalities = () => {
-  //   try {
-  //     const nationalities = natData.nationalities;
-  //     return nationalities.map((nat) => nat.abbr);
-  //   } catch (error) {
-  //     console.error("Error fetching nationalities:", error);
-  //     return [];
-  //   }
-  // };
-
   const getNationalities = async () => {
     try {
       const response = await fetch("/nat.json");
