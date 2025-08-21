@@ -1,84 +1,88 @@
-import React, { useState, useEffect } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
+import { useLoaderData, Await } from 'react-router-dom';
 import ControlPanel from '../components/ControlPanel';
 import FormationDisplay from '../components/FormationDisplay';
 import PlayerList from '../components/PlayerList';
-import SearchBar from '../components/SearchBar'; // Import SearchBar component
-import { useLoaderData } from 'react-router-dom';
+import SearchBar from '../components/SearchBar';
 import LoadingSpinner from '../components/LoadingSpinner';
 import FormationManager from '../components/FormationManager';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
 const PlannerPage = () => {
+  const { allplayerprofiles } = useLoaderData(); // deferred promise
+
+  return (
+    <Suspense fallback={<LoadingSpinner message="Fetching Players..." />}>
+      <Await
+        resolve={allplayerprofiles}
+        errorElement={<p className="text-center text-red-500">Failed to load players.</p>}
+      >
+        {(players) => <PlannerCore players={players} />}
+      </Await>
+    </Suspense>
+  );
+};
+
+const PlannerCore = ({ players }) => {
   const emptyFormation = {
     defenseLines: [{ players: [null] }],
     midfieldLines: [{ players: [null] }],
     attackLines: [{ players: [null] }],
     goalkeeperLine: [{ players: [null] }]
-  }
-  const [formation, setFormation] = useState(emptyFormation);
+  };
 
+  const [formation, setFormation] = useState(emptyFormation);
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [showPlayerList, setShowPlayerList] = useState(false);
   const [currentBox, setCurrentBox] = useState(null);
-
-  const allPlayers = useLoaderData()
-  if(!allPlayers){
-    return <LoadingSpinner message='Fetching Players...'></LoadingSpinner>
-  }
-  const [availablePlayers, setAvailablePlayers] = useState(allPlayers);
-  const [searchTerm, setSearchTerm] = useState(""); // State for search term
-
+  const [availablePlayers, setAvailablePlayers] = useState(players);
+  const [searchTerm, setSearchTerm] = useState("");
   const [formations, setFormations] = useState([]);
-  useEffect(()=>{
-    const fetchFormations = async() =>{
-      const baseURLs = ["https://proquest-pspc.onrender.com","https://3b14d84e-bf47-4b87-a7d1-29985604422c-00-373hveltrbpzh.riker.replit.dev:8080"]
-      const allFormationsUrl = `/api/formations`;
-      
+  const [isLoadedFormation, setIsLoadedFormation] = useState(false);
+
+  // Fetch formations
+  useEffect(() => {
+    const fetchFormations = async () => {
       try {
-        const response = await axios.get(allFormationsUrl);
-        setFormations(response.data.data || []); // Ensure response.data.data is an array
-      } catch (error) {
-        console.error('Error fetching formations:', error);
-        setFormations([]); // Set to empty array if error occurs
+        const res = await axios.get("/api/formations");
+        setFormations(res.data.data || []);
+      } catch (err) {
+        console.error("Error fetching formations:", err);
       }
     };
     fetchFormations();
   }, []);
-  const [isLoadedFormation, setIsLoadedFormation] = useState(false)
-  const hasNullPlayers = () => {
-    return formation.defenseLines.some(line => line.players.includes(null)) ||
-        formation.midfieldLines.some(line => line.players.includes(null)) ||
-        formation.attackLines.some(line => line.players.includes(null)) ||
-        formation.goalkeeperLine.some(line => line.players.includes(null))
-  };
 
+  // Auto-assign player when selected + box selected
   useEffect(() => {
     if (selectedPlayer && currentBox) {
       handleAddPlayer(currentBox.lineType, currentBox.lineIndex, currentBox.playerIndex);
     }
   }, [selectedPlayer, currentBox]);
 
+  const hasNullPlayers = () => {
+    return formation.defenseLines.some(line => line.players.includes(null)) ||
+      formation.midfieldLines.some(line => line.players.includes(null)) ||
+      formation.attackLines.some(line => line.players.includes(null)) ||
+      formation.goalkeeperLine.some(line => line.players.includes(null));
+  };
+
+  // Add player to formation
   const handleAddPlayer = (lineType, lineIndex, playerIndex) => {
     if (selectedPlayer) {
-      const {_id, first, last, position, overall, gender, star} = selectedPlayer
-      const plan_player = {_id, first, last, position, overall, gender, star}
+      const { _id, first, last, position, overall, gender, star } = selectedPlayer;
+      const plan_player = { _id, first, last, position, overall, gender, star };
+
       const newFormation = { ...formation };
-      const line = lineType === "goalkeeper" ? newFormation[`${lineType}Line`][lineIndex] : newFormation[`${lineType}Lines`][lineIndex];
+      const lineKey = lineType === "goalkeeper" ? `${lineType}Line` : `${lineType}Lines`;
+      const line = newFormation[lineKey][lineIndex];
       const updatedPlayers = [...line.players];
-      // updatedPlayers[playerIndex] = selectedPlayer;
-      updatedPlayers[playerIndex] = plan_player
-      if (lineType === "goalkeeper") {
-        newFormation[`${lineType}Line`][lineIndex] = { players: updatedPlayers };
-      } else {
-        newFormation[`${lineType}Lines`][lineIndex] = { players: updatedPlayers };
-      }
+      updatedPlayers[playerIndex] = plan_player;
+      newFormation[lineKey][lineIndex] = { players: updatedPlayers };
+
       setFormation(newFormation);
-
-      setAvailablePlayers(prevPlayers =>
-        prevPlayers.filter(player => player._id !== selectedPlayer._id)
-      );
-
+      setAvailablePlayers(prev => prev.filter(p => p._id !== selectedPlayer._id));
       setSelectedPlayer(null);
       setShowPlayerList(false);
       setCurrentBox(null);
@@ -86,47 +90,92 @@ const PlannerPage = () => {
   };
 
   const handleRemovePlayer = (lineType, lineIndex, playerIndex) => {
-    const playerToRemove = formation[lineType === "goalkeeper" ? `${lineType}Line` : `${lineType}Lines`][lineIndex].players[playerIndex];
-    if(isLoadedFormation){
-      toast.error("Cannot change saved formation")
-      return
+    if (isLoadedFormation) {
+      toast.error("Cannot change saved formation");
+      return;
     }
+
+    const lineKey = lineType === "goalkeeper" ? `${lineType}Line` : `${lineType}Lines`;
+    const playerToRemove = formation[lineKey][lineIndex].players[playerIndex];
     if (playerToRemove) {
-      const newFormation = { ...formation };
-      const line = lineType === "goalkeeper" ? newFormation[`${lineType}Line`][lineIndex] : newFormation[`${lineType}Lines`][lineIndex];
-      const updatedPlayers = [...line.players];
+      const updatedFormation = { ...formation };
+      const updatedPlayers = [...updatedFormation[lineKey][lineIndex].players];
       updatedPlayers[playerIndex] = null;
-      if (lineType === "goalkeeper") {
-        newFormation[`${lineType}Line`][lineIndex] = { players: updatedPlayers };
-      } else {
-        newFormation[`${lineType}Lines`][lineIndex] = { players: updatedPlayers };
-      }
-      setFormation(newFormation);
+      updatedFormation[lineKey][lineIndex] = { players: updatedPlayers };
 
-      setAvailablePlayers(prevPlayers => {
-        if (!prevPlayers.some(player => player._id === playerToRemove._id)) {
-          return [...prevPlayers, playerToRemove];
-        }
-        return prevPlayers;
-      });
-
+      setFormation(updatedFormation);
+      setAvailablePlayers(prev => [...prev, playerToRemove]);
       setCurrentBox(null);
     }
   };
 
-  const handleSelectPlayer = (player) => {
-    setSelectedPlayer(player);
+  const handleSearchChange = (e) => setSearchTerm(e.target.value);
+  const filteredPlayers = availablePlayers.filter(p =>
+    `${p.first} ${p.last}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (p.position?.preferred[0] || '').toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleUpdateFormation = (newFormation) => {
+    setFormation(newFormation);
+    handleResetPlayers();
+  };
+
+  const handleResetPlayers = () => {
+    const allUsedPlayers = Object.values(formation).flatMap(lines =>
+      lines.flatMap(line => line.players.filter(p => p))
+    );
+    setAvailablePlayers(prev => [
+      ...prev.filter(p => !allUsedPlayers.some(up => up._id === p._id)),
+      ...allUsedPlayers
+    ]);
+  };
+
+  const handleSaveFormation = async (name) => {
+    if (hasNullPlayers()) {
+      toast.error("Cannot save an incomplete formation");
+      return;
+    }
+    try {
+      const response = await axios.post("/api/formations", { ...formation, name });
+      setFormations(response.data.data);
+    } catch (error) {
+      console.error(error);
+    }
+    setFormation(emptyFormation);
+    setAvailablePlayers(players);
+  };
+
+  const handleLoadFormation = (savedFormation) => {
+    setFormation(savedFormation);
+    setAvailablePlayers(players);
+    setIsLoadedFormation(true);
+  };
+
+  const handleClearFormation = () => {
+    setIsLoadedFormation(false);
+    setFormation(emptyFormation);
+    setAvailablePlayers(players);
+  };
+
+  const handleDeleteFormation = async (name) => {
+    try {
+      const response = await axios.delete(`/api/formations/${name}`);
+      if (formation.name === name) handleClearFormation();
+      setFormations(response.data.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleBoxClick = (lineType, lineIndex, playerIndex) => {
-    if(isLoadedFormation){
-      toast.error("Cannot change saved formation")
-      return
+    if (isLoadedFormation) {
+      toast.error("Cannot change saved formation");
+      return;
     }
-    if(currentBox!==null && currentBox.lineType===lineType && currentBox.lineIndex===lineIndex && currentBox.playerIndex===playerIndex){
+    if (currentBox?.lineType === lineType && currentBox?.lineIndex === lineIndex && currentBox?.playerIndex === playerIndex) {
       setCurrentBox(null);
       setShowPlayerList(false);
-    }else{
+    } else {
       setCurrentBox({ lineType, lineIndex, playerIndex });
       setShowPlayerList(true);
     }
@@ -137,116 +186,27 @@ const PlannerPage = () => {
     setCurrentBox(null);
   };
 
-  const handleUpdateFormation = (newFormation) => {
-    setFormation(newFormation);
-    handleResetPlayers();
-  };
-
-  const handleResetPlayers = () => {
-    const allPlayers = Object.values(formation)
-      .flatMap(lines => lines.flatMap(line => line.players.filter(player => player)))
-    
-    setAvailablePlayers(prevPlayers => [
-      ...prevPlayers.filter(player => !allPlayers.some(p => p._id === player._id)),
-      ...allPlayers
-    ]);
-  };
-
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-  };
-
-  // Filter available players based on the search term
-  const filteredPlayers = availablePlayers.filter(player => 
-    player.first.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    player.last.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (player.position?.preferred[0] || '').toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  //formation handling
-  const handleSaveFormation = async(name)=>{
-    console.log(formation,"current")
-    
-    if(hasNullPlayers()){
-      toast.error("Cannot save an incomplete formation")
-      return
-    }
-    //const updatedFormations = [...formations, {...formation, name}]
-    const baseURLs = ["https://proquest-pspc.onrender.com","https://3b14d84e-bf47-4b87-a7d1-29985604422c-00-373hveltrbpzh.riker.replit.dev:8080"]
-    try {
-      const response = await axios.post(`/api/formations`,{...formation, name})
-      console.log(response.data)
-      setFormations(response.data.data)
-    } catch (error) {
-      console.log(error)
-    }
-    setFormation(emptyFormation)
-    setAvailablePlayers(allPlayers)
-    console.log("saved", formations)
-  }
-
-  const handleLoadFormation =(savedFormation)=>{
-    setFormation(savedFormation);
-    setAvailablePlayers(allPlayers)
-    setIsLoadedFormation(!isLoadedFormation)
-  }
-
-  const handleClearFormation = ()=>{
-    setIsLoadedFormation(!isLoadedFormation)
-    setFormation(emptyFormation)
-    setAvailablePlayers(allPlayers)
-  }
-
-  const handleDeleteFormation = async(name)=>{
-    // const updatedFormations = formations.filter((savedFormation)=>{
-    //   const deleted = savedFormation.name!==name
-    //   if(savedFormation.name===formation.name){
-    //     handleClearFormation()
-    //   }
-    //   return deleted
-    // })
-    // console.log(updatedFormations)
-    // setFormations(updatedFormations)
-    const baseURLs = ["https://proquest-pspc.onrender.com","https://3b14d84e-bf47-4b87-a7d1-29985604422c-00-373hveltrbpzh.riker.replit.dev:8080"]
-    try {
-      const response = await axios.delete(`/api/formations/${name}`)
-      //console.log(response,response.data,response.data.data,"ggg")
-      if(formation.name===name){
-        console.log("clear spec")
-        handleClearFormation()
-      }
-      setFormations(response.data.data)
-    } catch (error) {
-      console.log(error)
-    }
-    
-  }
-
- 
   return (
     <div className="flex flex-col lg:flex-row min-h-screen">
       <aside className="w-full lg:w-1/4 bg-gray-100 p-4 lg:p-6">
-        {showPlayerList && (
+        {showPlayerList ? (
           <div className="relative">
             <SearchBar value={searchTerm} onChange={handleSearchChange} className="mb-4" />
             <PlayerList
               players={filteredPlayers}
-              onPlayerSelect={handleSelectPlayer}
+              onPlayerSelect={setSelectedPlayer}
               onClose={handleClosePlayerList}
               className="max-h-[calc(100vh-120px)] overflow-y-auto"
             />
           </div>
-        )}
-        {!showPlayerList && (
-          <div className="relative">
-            <FormationManager
+        ) : (
+          <FormationManager
             onSaveFormation={handleSaveFormation}
             formations={formations}
             onLoadFormation={handleLoadFormation}
             onClearFormation={handleClearFormation}
             onDeleteFormation={handleDeleteFormation}
-             />
-          </div>
+          />
         )}
       </aside>
       <main className="w-full lg:w-1/2 p-4 lg:p-6 flex-grow">
