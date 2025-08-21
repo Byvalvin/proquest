@@ -2,13 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; // to redirect to other page after submit
 import { toast } from "react-toastify";
-
-const getDaysInMonth = (year, month) => {
-  const y = parseInt(year);
-  const m = parseInt(month);
-  if (!y || !m || isNaN(y) || isNaN(m)) return 31; // fallback to 31
-  return new Date(y, m, 0).getDate();
-};
+// import natData from '../nat.json';
 
 const AddPlayerPage = () => {
   
@@ -77,6 +71,17 @@ const AddPlayerPage = () => {
     fetchData();
   }, []);
   
+
+  // const getNationalities = () => {
+  //   try {
+  //     const nationalities = natData.nationalities;
+  //     return nationalities.map((nat) => nat.abbr);
+  //   } catch (error) {
+  //     console.error("Error fetching nationalities:", error);
+  //     return [];
+  //   }
+  // };
+
   const getNationalities = async () => {
     try {
       const response = await fetch("/nat.json");
@@ -91,7 +96,7 @@ const AddPlayerPage = () => {
 
   const getTeamNames = async () => {
     try {
-      const teamsURL = "/api/teams";
+      const teamsURL = "https://proquest-pspc.onrender.com/api/teams";
       const response = await axios.get(teamsURL);
       return response.data.data.map((team) => team.name);
     } catch (error) {
@@ -102,7 +107,7 @@ const AddPlayerPage = () => {
 
   const addPlayer = async (player) => {
     try {
-      const response = await axios.post("/api/players", player);
+      const response = await axios.post("https://proquest-pspc.onrender.com/api/players", player);
       console.log(response.data);
       resetForm();
     } catch (error) {
@@ -223,77 +228,29 @@ const AddPlayerPage = () => {
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700">Date of Birth</label>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {/* Year */}
-              <select
+              <input
+                type="text"
+                placeholder="Year"
                 value={DOB.year}
-                onChange={(e) => setDOB({ year: e.target.value, month: "", day: "" })}
+                onChange={(e) => setDOB({ ...DOB, year: e.target.value })}
                 className="border border-gray-300 rounded-lg px-3 py-2 mt-1 block w-full"
-              >
-                <option value="">Year</option>
-                {Array.from({ length: 40 }, (_, i) => {
-                  const year = new Date().getFullYear() - i;
-                  return (
-                    <option key={year} value={year}>
-                      {year}
-                    </option>
-                  );
-                })}
-              </select>
-
-              {/* Month */}
-              <select
+              />
+              <input
+                type="text"
+                placeholder="Month"
                 value={DOB.month}
-                onChange={(e) => setDOB({ ...DOB, month: e.target.value, day: "" })}
-                disabled={!DOB.year}
+                onChange={(e) => setDOB({ ...DOB, month: e.target.value })}
                 className="border border-gray-300 rounded-lg px-3 py-2 mt-1 block w-full"
-              >
-                <option value="">Month</option>
-                {Array.from({ length: 12 }, (_, i) => {
-                  const month = i + 1;
-                  return (
-                    <option key={month} value={month.toString().padStart(2, "0")}>
-                      {month}
-                    </option>
-                  );
-                })}
-              </select>
-
-              {/* Day */}
-              {(() => {
-                const daysInMonth = DOB.year && DOB.month ? getDaysInMonth(DOB.year, DOB.month) : 31;
-                console.log(
-                  "DOB Debug - Year:",
-                  DOB.year,
-                  "Month:",
-                  DOB.month,
-                  "Days in month:",
-                  daysInMonth
-                );
-
-                return (
-                  <select
-                    value={DOB.day}
-                    onChange={(e) => setDOB({ ...DOB, day: e.target.value })}
-                    disabled={!DOB.year || !DOB.month}
-                    className="border border-gray-300 rounded-lg px-3 py-2 mt-1 block w-full"
-                  >
-                    <option value="">Day</option>
-                    {Array.from({ length: daysInMonth }, (_, i) => {
-                      const day = i + 1;
-                      return (
-                        <option key={day} value={day.toString().padStart(2, "0")}>
-                          {day}
-                        </option>
-                      );
-                    })}
-                  </select>
-                );
-              })()}
-
-
+              />
+              <input
+                type="text"
+                placeholder="Day"
+                value={DOB.day}
+                onChange={(e) => setDOB({ ...DOB, day: e.target.value })}
+                className="border border-gray-300 rounded-lg px-3 py-2 mt-1 block w-full"
+              />
             </div>
           </div>
-
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="mb-4">
