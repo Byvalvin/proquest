@@ -41,7 +41,6 @@ const PlannerCore = ({ players }) => {
   const [formations, setFormations] = useState([]);
   const [isLoadedFormation, setIsLoadedFormation] = useState(false);
 
-  // Fetch formations
   useEffect(() => {
     const fetchFormations = async () => {
       try {
@@ -54,7 +53,6 @@ const PlannerCore = ({ players }) => {
     fetchFormations();
   }, []);
 
-  // Auto-assign player when selected + box selected
   useEffect(() => {
     if (selectedPlayer && currentBox) {
       handleAddPlayer(currentBox.lineType, currentBox.lineIndex, currentBox.playerIndex);
@@ -68,7 +66,6 @@ const PlannerCore = ({ players }) => {
       formation.goalkeeperLine.some(line => line.players.includes(null));
   };
 
-  // Add player to formation
   const handleAddPlayer = (lineType, lineIndex, playerIndex) => {
     if (selectedPlayer) {
       const { _id, first, last, position, overall, gender, star } = selectedPlayer;
@@ -99,17 +96,23 @@ const PlannerCore = ({ players }) => {
     const playerToRemove = formation[lineKey][lineIndex].players[playerIndex];
     if (playerToRemove) {
       const updatedFormation = { ...formation };
-      const updatedPlayers = [...updatedFormation[lineKey][lineIndex].players];
+      const updatedPlayers = [...formation[lineKey][lineIndex].players];
       updatedPlayers[playerIndex] = null;
       updatedFormation[lineKey][lineIndex] = { players: updatedPlayers };
 
       setFormation(updatedFormation);
-      setAvailablePlayers(prev => [...prev, playerToRemove]);
+      setAvailablePlayers(prev => {
+        if (!prev.some(p => p._id === playerToRemove._id)) {
+          return [...prev, playerToRemove];
+        }
+        return prev;
+      });
       setCurrentBox(null);
     }
   };
 
   const handleSearchChange = (e) => setSearchTerm(e.target.value);
+
   const filteredPlayers = availablePlayers.filter(p =>
     `${p.first} ${p.last}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
     (p.position?.preferred[0] || '').toLowerCase().includes(searchTerm.toLowerCase())
@@ -124,10 +127,9 @@ const PlannerCore = ({ players }) => {
     const allUsedPlayers = Object.values(formation).flatMap(lines =>
       lines.flatMap(line => line.players.filter(p => p))
     );
-    setAvailablePlayers(prev => [
-      ...prev.filter(p => !allUsedPlayers.some(up => up._id === p._id)),
-      ...allUsedPlayers
-    ]);
+    setAvailablePlayers(prev =>
+      [...prev.filter(p => !allUsedPlayers.some(up => up._id === p._id)), ...allUsedPlayers]
+    );
   };
 
   const handleSaveFormation = async (name) => {
@@ -172,7 +174,11 @@ const PlannerCore = ({ players }) => {
       toast.error("Cannot change saved formation");
       return;
     }
-    if (currentBox?.lineType === lineType && currentBox?.lineIndex === lineIndex && currentBox?.playerIndex === playerIndex) {
+    if (
+      currentBox?.lineType === lineType &&
+      currentBox?.lineIndex === lineIndex &&
+      currentBox?.playerIndex === playerIndex
+    ) {
       setCurrentBox(null);
       setShowPlayerList(false);
     } else {
@@ -218,7 +224,10 @@ const PlannerCore = ({ players }) => {
         />
       </main>
       <div className="w-full lg:w-1/4 bg-gray-100 p-4 lg:p-6">
-        <ControlPanel onUpdateFormation={handleUpdateFormation} onResetPlayers={handleResetPlayers} />
+        <ControlPanel
+          onUpdateFormation={handleUpdateFormation}
+          onResetPlayers={handleResetPlayers}
+        />
       </div>
     </div>
   );
