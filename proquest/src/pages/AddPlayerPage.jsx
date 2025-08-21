@@ -258,23 +258,29 @@ const AddPlayerPage = () => {
               </select>
 
               {/* Day */}
-              <select
-                value={DOB.day}
-                onChange={(e) => setDOB({ ...DOB, day: e.target.value })}
-                className="border border-gray-300 rounded-lg px-3 py-2 mt-1 block w-full"
-              >
-                <option value="">Day</option>
-                {Array.from({
-                  length: getDaysInMonth(DOB.year, DOB.month),
-                }, (_, i) => {
-                  const day = i + 1;
-                  return (
-                    <option key={day} value={day.toString().padStart(2, '0')}>
-                      {day}
-                    </option>
-                  );
-                })}
-              </select>
+              {(() => {
+                const daysInMonth = getDaysInMonth(DOB.year, DOB.month);
+                console.log("DOB Debug - Year:", DOB.year, "Month:", DOB.month, "Days in month:", daysInMonth);
+
+                return (
+                  <select
+                    value={DOB.day}
+                    onChange={(e) => setDOB({ ...DOB, day: e.target.value })}
+                    className="border border-gray-300 rounded-lg px-3 py-2 mt-1 block w-full"
+                  >
+                    <option value="">Day</option>
+                    {Array.from({ length: Number(daysInMonth) || 31 }, (_, i) => {
+                      const day = i + 1;
+                      return (
+                        <option key={day} value={day.toString().padStart(2, '0')}>
+                          {day}
+                        </option>
+                      );
+                    })}
+                  </select>
+                );
+              })()}
+
             </div>
           </div>
 
