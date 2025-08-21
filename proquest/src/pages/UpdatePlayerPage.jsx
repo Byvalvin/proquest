@@ -64,7 +64,7 @@ const UpdatePlayerPage = () => {
 
     const getTeamNames = async () => {
         try {
-            const response = await axios.get("https://proquest-pspc.onrender.com/api/teams");
+            const response = await axios.get("/api/teams");
             return response.data.data.map((team) => team.name);
         } catch (error) {
             console.error("Error fetching teams:", error);
@@ -74,7 +74,7 @@ const UpdatePlayerPage = () => {
 
     const updatePlayer = async (player) => {
         try {
-            const baseURLs = ["https://proquest-pspc.onrender.com","https://3b14d84e-bf47-4b87-a7d1-29985604422c-00-373hveltrbpzh.riker.replit.dev:8080"]
+            const baseURLs = ["","https://3b14d84e-bf47-4b87-a7d1-29985604422c-00-373hveltrbpzh.riker.replit.dev:8080"]
             const updateURL = `/api/players/${playerToUpdate._id}`;
             const response = await axios.put(updateURL, player);
             return response.data;
