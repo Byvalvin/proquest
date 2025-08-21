@@ -43,6 +43,7 @@ const getTeam = asyncHandler(async(request, response, next)=>{
 const addTeam = asyncHandler(async(request, response, next)=>{
     let { name, year, roster, rating, performance, baseValue, value } = request.body
     year = Number(year);
+    baseValue = Number(baseValue) || 50;
     const team = { name, year, roster, rating, performance, baseValue, value }
 
     if(!name){
@@ -78,7 +79,9 @@ const addTeam = asyncHandler(async(request, response, next)=>{
 const updateTeam = asyncHandler(async(request, response, next)=>{
     const ID = request.params.id
     try {
-        const { name, year, roster, rating, performance, baseValue, value } = request.body
+        let { name, year, roster, rating, performance, baseValue, value } = request.body
+        year = Number(year);
+        baseValue = Number(baseValue) || 50;
         const team = { name, year, roster, rating, performance, baseValue, value }
 
         const updatedTeam = await Team.findByIdAndUpdate(ID, team, {new:true} )
