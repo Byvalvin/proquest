@@ -226,7 +226,7 @@ const AddPlayerPage = () => {
               {/* Year */}
               <select
                 value={DOB.year}
-                onChange={(e) => setDOB({ ...DOB, year: e.target.value })}
+                onChange={(e) => setDOB({ year: e.target.value, month: "", day: "" })}
                 className="border border-gray-300 rounded-lg px-3 py-2 mt-1 block w-full"
               >
                 <option value="">Year</option>
@@ -243,14 +243,15 @@ const AddPlayerPage = () => {
               {/* Month */}
               <select
                 value={DOB.month}
-                onChange={(e) => setDOB({ ...DOB, month: e.target.value })}
+                onChange={(e) => setDOB({ ...DOB, month: e.target.value, day: "" })}
+                disabled={!DOB.year}
                 className="border border-gray-300 rounded-lg px-3 py-2 mt-1 block w-full"
               >
                 <option value="">Month</option>
                 {Array.from({ length: 12 }, (_, i) => {
                   const month = i + 1;
                   return (
-                    <option key={month} value={month.toString().padStart(2, '0')}>
+                    <option key={month} value={month.toString().padStart(2, "0")}>
                       {month}
                     </option>
                   );
@@ -259,20 +260,28 @@ const AddPlayerPage = () => {
 
               {/* Day */}
               {(() => {
-                const daysInMonth = getDaysInMonth(DOB.year, DOB.month);
-                console.log("DOB Debug - Year:", DOB.year, "Month:", DOB.month, "Days in month:", daysInMonth);
+                const daysInMonth = DOB.year && DOB.month ? getDaysInMonth(DOB.year, DOB.month) : 31;
+                console.log(
+                  "DOB Debug - Year:",
+                  DOB.year,
+                  "Month:",
+                  DOB.month,
+                  "Days in month:",
+                  daysInMonth
+                );
 
                 return (
                   <select
                     value={DOB.day}
                     onChange={(e) => setDOB({ ...DOB, day: e.target.value })}
+                    disabled={!DOB.year || !DOB.month}
                     className="border border-gray-300 rounded-lg px-3 py-2 mt-1 block w-full"
                   >
                     <option value="">Day</option>
-                    {Array.from({ length: Number(daysInMonth) || 31 }, (_, i) => {
+                    {Array.from({ length: daysInMonth }, (_, i) => {
                       const day = i + 1;
                       return (
-                        <option key={day} value={day.toString().padStart(2, '0')}>
+                        <option key={day} value={day.toString().padStart(2, "0")}>
                           {day}
                         </option>
                       );
@@ -280,6 +289,7 @@ const AddPlayerPage = () => {
                   </select>
                 );
               })()}
+
 
             </div>
           </div>
