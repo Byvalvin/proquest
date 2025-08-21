@@ -102,7 +102,7 @@ const AddPlayerPage = () => {
 
   const getTeamNames = async () => {
     try {
-      const teamsURL = "https://proquest-pspc.onrender.com/api/teams";
+      const teamsURL = "/api/teams";
       const response = await axios.get(teamsURL);
       return response.data.data.map((team) => team.name);
     } catch (error) {
@@ -113,7 +113,7 @@ const AddPlayerPage = () => {
 
   const addPlayer = async (player) => {
     try {
-      const response = await axios.post("https://proquest-pspc.onrender.com/api/players", player);
+      const response = await axios.post("/api/players", player);
       console.log(response.data);
       resetForm();
     } catch (error) {
