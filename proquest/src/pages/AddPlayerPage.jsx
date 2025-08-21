@@ -3,6 +3,14 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom"; // to redirect to other page after submit
 import { toast } from "react-toastify";
 
+const getDaysInMonth = (year, month) => {
+  const y = parseInt(year);
+  const m = parseInt(month);
+  if (!y || !m || isNaN(y) || isNaN(m)) return 31;
+  return new Date(y, m, 0).getDate();
+};
+
+
 const AddPlayerPage = () => {
   const navigate = useNavigate();
 
@@ -217,27 +225,73 @@ const AddPlayerPage = () => {
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700">Date of Birth</label>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <input
-                type="text"
-                placeholder="Year"
+              {/* Year */}
+              <select
                 value={DOB.year}
-                onChange={(e) => setDOB({ ...DOB, year: e.target.value })}
+                onChange={(e) => setDOB({ year: e.target.value, month: "", day: "" })}
                 className="border border-gray-300 rounded-lg px-3 py-2 mt-1 block w-full"
-              />
-              <input
-                type="text"
-                placeholder="Month"
+              >
+                <option value="">Year</option>
+                {Array.from({ length: 40 }, (_, i) => {
+                  const year = new Date().getFullYear() - i;
+                  return (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  );
+                })}
+              </select>
+
+              {/* Month */}
+              <select
                 value={DOB.month}
-                onChange={(e) => setDOB({ ...DOB, month: e.target.value })}
+                onChange={(e) => setDOB({ ...DOB, month: e.target.value, day: "" })}
+                disabled={!DOB.year}
                 className="border border-gray-300 rounded-lg px-3 py-2 mt-1 block w-full"
-              />
-              <input
-                type="text"
-                placeholder="Day"
-                value={DOB.day}
-                onChange={(e) => setDOB({ ...DOB, day: e.target.value })}
-                className="border border-gray-300 rounded-lg px-3 py-2 mt-1 block w-full"
-              />
+              >
+                <option value="">Month</option>
+                {Array.from({ length: 12 }, (_, i) => {
+                  const month = i + 1;
+                  return (
+                    <option key={month} value={month.toString().padStart(2, "0")}>
+                      {month}
+                    </option>
+                  );
+                })}
+              </select>
+
+              {/* Day */}
+              {(() => {
+                const daysInMonth = DOB.year && DOB.month ? getDaysInMonth(DOB.year, DOB.month) : 31;
+                console.log(
+                  "DOB Debug - Year:",
+                  DOB.year,
+                  "Month:",
+                  DOB.month,
+                  "Days in month:",
+                  daysInMonth
+                );
+
+                return (
+                  <select
+                    value={DOB.day}
+                    onChange={(e) => setDOB({ ...DOB, day: e.target.value })}
+                    disabled={!DOB.year || !DOB.month}
+                    className="border border-gray-300 rounded-lg px-3 py-2 mt-1 block w-full"
+                  >
+                    <option value="">Day</option>
+                    {Array.from({ length: daysInMonth }, (_, i) => {
+                      const day = i + 1;
+                      return (
+                        <option key={day} value={day.toString().padStart(2, "0")}>
+                          {day}
+                        </option>
+                      );
+                    })}
+                  </select>
+                );
+              })()}
+
             </div>
           </div>
 
